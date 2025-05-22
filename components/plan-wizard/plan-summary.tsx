@@ -37,7 +37,7 @@ export default function PlanSummary({ config }: PlanSummaryProps) {
       try {
         let planData
 
-        if (config.readingType === "preset" && config.presetConfig) {
+        if ((config.readingType === "preset" || config.readingType === "stream-by-stream") && config.presetConfig) {
           // Generate plan using the preset config
           const { presetConfig, presetName, totalPlanDays } = config.presetConfig
 
@@ -57,7 +57,10 @@ export default function PlanSummary({ config }: PlanSummaryProps) {
             newTestamentPlacement: config.wholeBibleConfig.newTestamentPlacement,
             wisdomBooksPlacement: config.wholeBibleConfig.wisdomBooksPlacement,
             includedWisdomBooks: config.wholeBibleConfig.includedWisdomBooks,
-            totalPlanDays: config.duration.type === "months" ? config.duration.value * 30 : config.duration.value * 7,
+            totalPlanDays: config.duration.type === "months" ? Math.round(config.duration.value * 365.25 / 12) : 
+                          config.duration.type === "weeks" ? config.duration.value * 7 :
+                          config.duration.type === "years" ? Math.round(config.duration.value * 365.25) : 
+                          config.duration.value, // days
           })
 
           // Use the original generateMultiStreamPlan function with the configuration
@@ -79,7 +82,10 @@ export default function PlanSummary({ config }: PlanSummaryProps) {
             description: `A ${config.duration.value} ${config.duration.type} reading plan through ${getSectionName(config.section)}.`,
             booksToInclude: config.selectedBooks.map((bookCode) => ({ bookCode })),
             chaptersPerDay: 1,
-            totalPlanDays: config.duration.type === "months" ? config.duration.value * 30 : config.duration.value * 7,
+            totalPlanDays: config.duration.type === "months" ? Math.round(config.duration.value * 365.25 / 12) : 
+                          config.duration.type === "weeks" ? config.duration.value * 7 :
+                          config.duration.type === "years" ? Math.round(config.duration.value * 365.25) : 
+                          config.duration.value, // days
             tags: [config.section, config.pathway, `${config.duration.value}-${config.duration.type}`],
             author: "Bible Plan Generator",
             version: "1.0",
@@ -87,6 +93,7 @@ export default function PlanSummary({ config }: PlanSummaryProps) {
         }
 
         // Calculate plan statistics
+        console.log("[DEBUG] Generated planData:", planData)
         const stats = calculatePlanStatistics(planData)
         setPlanStats(stats)
         setPlan(planData)

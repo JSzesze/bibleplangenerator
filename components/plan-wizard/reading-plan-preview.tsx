@@ -54,7 +54,10 @@ export default function ReadingPlanPreview({ config, showOnlyOnFinal = false }: 
             newTestamentPlacement: config.wholeBibleConfig.newTestamentPlacement,
             wisdomBooksPlacement: config.wholeBibleConfig.wisdomBooksPlacement,
             includedWisdomBooks: config.wholeBibleConfig.includedWisdomBooks,
-            totalPlanDays: config.duration.type === "months" ? config.duration.value * 30 : config.duration.value * 7,
+            totalPlanDays: config.duration.type === "months" ? Math.round(config.duration.value * 365.25 / 12) : 
+                          config.duration.type === "weeks" ? config.duration.value * 7 :
+                          config.duration.type === "years" ? Math.round(config.duration.value * 365.25) : 
+                          config.duration.value, // days
           })
 
           // Use the original generateMultiStreamPlan function with the configuration
@@ -89,7 +92,10 @@ export default function ReadingPlanPreview({ config, showOnlyOnFinal = false }: 
             description: `A preview of your ${section} reading plan.`,
             booksToInclude: selectedBooks.map((bookCode) => ({ bookCode })),
             chaptersPerDay: 1,
-            totalPlanDays: config.duration.type === "months" ? config.duration.value * 30 : config.duration.value * 7,
+            totalPlanDays: config.duration.type === "months" ? Math.round(config.duration.value * 365.25 / 12) : 
+                          config.duration.type === "weeks" ? config.duration.value * 7 :
+                          config.duration.type === "years" ? Math.round(config.duration.value * 365.25) : 
+                          config.duration.value, // days
             tags: [section, pathway],
             author: "Bible Plan Generator",
             version: "1.0",

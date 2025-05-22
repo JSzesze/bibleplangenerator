@@ -75,7 +75,10 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
       setStreamVisualization(visualization)
 
       // Generate plan preview
-      const totalDays = duration.type === "months" ? duration.value * 30 : duration.value * 7
+      const totalDays = duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                     duration.type === "weeks" ? duration.value * 7 :
+                     duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                     duration.value // days
 
       try {
         const planData = await generateMultiStreamPlan({
@@ -106,7 +109,10 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
     // If all streams have a 'label' property (Horner), just map them directly
     if (streams.every((s) => s.label)) {
       // Calculate repetitions for each list
-      const totalPlanDays = duration.type === "months" ? duration.value * 30 : duration.value * 7
+      const totalPlanDays = duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                           duration.type === "weeks" ? duration.value * 7 :
+                           duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                           duration.value // days
       const result = streams.map((stream) => {
         // Sum chapters for this list
         const totalChapters = stream.bookCodes.reduce((sum: number, code: number) => {
@@ -218,7 +224,10 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
         presetId: selectedPreset,
         presetName: preset.title,
         presetConfig: config,
-        totalPlanDays: duration.type === "months" ? duration.value * 30 : duration.value * 7,
+        totalPlanDays: duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                      duration.type === "weeks" ? duration.value * 7 :
+                      duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                      duration.value, // days
       })
     }
   }

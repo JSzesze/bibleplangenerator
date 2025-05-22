@@ -234,7 +234,10 @@ export default function BuildYourOwnFlow({ onComplete, onBack, duration }: Build
 
     // Only generate if we have books selected
     if (planStreams.some((stream) => stream.bookCodes.length > 0)) {
-      const totalDays = duration.type === "months" ? duration.value * 30 : duration.value * 7
+      const totalDays = duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                     duration.type === "weeks" ? duration.value * 7 :
+                     duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                     duration.value // days
 
       try {
         const planData = await generateMultiStreamPlan({
@@ -273,9 +276,15 @@ export default function BuildYourOwnFlow({ onComplete, onBack, duration }: Build
       presetName: "Custom Reading Plan",
       presetConfig: {
         streams: planStreams,
-        totalPlanDays: duration.type === "months" ? duration.value * 30 : duration.value * 7,
+        totalPlanDays: duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                      duration.type === "weeks" ? duration.value * 7 :
+                      duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                      duration.value, // days
       },
-      totalPlanDays: duration.type === "months" ? duration.value * 30 : duration.value * 7,
+      totalPlanDays: duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                    duration.type === "weeks" ? duration.value * 7 :
+                    duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                    duration.value, // days
     })
   }
 

@@ -57,8 +57,8 @@ export default function BiblePlanGenerator() {
     section: "", // "old-testament", "new-testament", "psalms", "gospels", "custom"
     pathway: "", // "storyline", "straight", "hebrew"
     duration: {
-      type: "months", // "months" or "weeks"
-      value: 12,
+      type: "days", // "days", "weeks", "months", or "years"
+      value: 365,
     },
     selectedBooks: [] as number[],
     wholeBibleConfig: {

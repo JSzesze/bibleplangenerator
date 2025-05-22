@@ -210,7 +210,10 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
   const [showStreamAlert, setShowStreamAlert] = useState<number | null>(null)
 
   const defaultDuration = { type: "days", value: 365 }
-  const planDuration = duration.type === "months" ? duration.value * 30 : duration.value * 7
+  const planDuration = duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
+                      duration.type === "weeks" ? duration.value * 7 :
+                      duration.type === "years" ? Math.round(duration.value * 365.25) : 
+                      duration.value // days
   const effectiveDuration = planDuration || defaultDuration.value
 
   const divisionRepetitions = previewPlan
@@ -390,6 +393,8 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
     if (planStreams.some((stream) => stream.bookCodes.length > 0)) {
       const totalDays = effectiveDuration
 
+      console.log("[DEBUG] Calling generateMultiStreamPlan with:", { planStreams, totalDays })
+
       try {
         const planData = await generateMultiStreamPlan({
           id: `custom-${Date.now()}`,
@@ -412,7 +417,7 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
   }
 
   // Handle completion
-  const handleComplete = () => {
+  const handleComplete = async () => {
     // Convert our streams to the format expected by the plan generator
     const planStreams = streams.map((stream) => {
       // Get all book codes from the selected divisions
@@ -424,9 +429,10 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
       }
     })
 
+    // Pass the configuration object instead of the generated plan
     onComplete({
-      presetId: "custom-stream-by-stream",
-      presetName: "Custom Stream-by-Stream Plan",
+      presetId: "stream-by-stream",
+      presetName: "Stream-by-Stream Reading Plan",
       presetConfig: {
         streams: planStreams,
         totalPlanDays: effectiveDuration,

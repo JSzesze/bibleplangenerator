@@ -161,6 +161,7 @@ export function generateMultiStreamPlan(params: {
   author?: string
   version?: string
 }): PrecalculatedDailyPlanSchema {
+  console.log("[DEBUG] generateMultiStreamPlan params:", params)
   const { id, name, description, streams, totalPlanDays, tags, author, version } = params
 
   const bibleData = getBibleBookData()
@@ -177,6 +178,7 @@ export function generateMultiStreamPlan(params: {
 
   // Generate readings for each day
   for (let day = 0; day < totalPlanDays; day++) {
+    console.log('[DEBUG] Generating day', day);
     const todayReadings: ReadingPortion[] = []
 
     // Process each stream
@@ -228,9 +230,23 @@ export function generateMultiStreamPlan(params: {
       }
     }
 
+    console.log('[DEBUG] Day', day, 'readings:', todayReadings);
     dailyReadings.push(todayReadings)
   }
 
+  // Before returning, log the plan object
+  console.log('[DEBUG] Returning plan:', {
+    id,
+    name,
+    description,
+    planType: "precalculated_daily_json",
+    totalPlanDays,
+    tags,
+    author,
+    version,
+    dailyReadings,
+    bookReadingCounts,
+  });
   return {
     id,
     name,
