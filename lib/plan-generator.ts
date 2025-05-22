@@ -1,8 +1,5 @@
 import bibleBooks from "@/constants/books.json"
 
-// This file will contain the logic for generating Bible reading plans
-// It will be implemented once you provide the Bible data and schema
-
 /**
  * Represents a portion of Bible reading (book, chapter, and optionally verses)
  */
@@ -67,26 +64,8 @@ export interface ReadingPlan {
 /**
  * Get Bible book data from the imported JSON file
  */
-export async function getBibleBookData(): Promise<BookData[]> {
+export function getBibleBookData(): BookData[] {
   return bibleBooks as BookData[]
-}
-
-export function generateReadingPlan(
-  bibleData: any,
-  duration: number,
-  selectedBooks: string[],
-  planType: string,
-): ReadingPlan {
-  // This function will be implemented based on your Bible data structure
-  // For now, it returns a placeholder plan
-
-  return {
-    title: `${duration}-day Bible Reading Plan`,
-    days: Array.from({ length: duration }, (_, i) => ({
-      day: i + 1,
-      readings: [`Sample reading for day ${i + 1}`],
-    })),
-  }
 }
 
 /**
@@ -94,7 +73,7 @@ export function generateReadingPlan(
  * @param params Configuration parameters for the sequential plan
  * @returns A precalculated daily reading plan
  */
-export async function generateSequentialPlan(params: {
+export function generateSequentialPlan(params: {
   id: string
   name: string
   description: string
@@ -104,13 +83,16 @@ export async function generateSequentialPlan(params: {
   tags?: string[]
   author?: string
   version?: string
-}): Promise<PrecalculatedDailyPlanSchema> {
+}): PrecalculatedDailyPlanSchema {
   const { id, name, description, booksToInclude, chaptersPerDay = 1, totalPlanDays, tags, author, version } = params
 
-  const bibleData = await getBibleBookData()
+  const bibleData = getBibleBookData()
   const dailyReadings: ReadingPortion[][] = []
   let currentDay: ReadingPortion[] = []
   let dayCount = 0
+
+  // Track reading counts per book
+  const bookReadingCounts: Record<number, number> = {}
 
   // Process each book in the sequence
   for (const bookSelection of booksToInclude) {
@@ -132,6 +114,12 @@ export async function generateSequentialPlan(params: {
         chapter,
         bookName: bookData.name,
       })
+
+      // Track reading count for this book
+      if (!bookReadingCounts[bookData.bookCode]) {
+        bookReadingCounts[bookData.bookCode] = 0
+      }
+      bookReadingCounts[bookData.bookCode]++
 
       // If we've reached the chapters per day, move to the next day
       if (currentDay.length >= chaptersPerDay) {
@@ -168,6 +156,7 @@ export async function generateSequentialPlan(params: {
     author,
     version,
     dailyReadings,
+    bookReadingCounts,
   }
 }
 
@@ -188,7 +177,7 @@ export async function generateMultiStreamPlan(params: {
 }): Promise<PrecalculatedDailyPlanSchema> {
   const { id, name, description, streams, totalPlanDays, tags, author, version } = params
 
-  const bibleData = await getBibleBookData()
+  const bibleData = getBibleBookData()
   const dailyReadings: ReadingPortion[][] = []
 
   // Track reading counts per book
@@ -275,7 +264,7 @@ export async function generateMultiStreamPlan(params: {
  * @param params Configuration parameters for the topical plan
  * @returns A precalculated daily reading plan
  */
-export async function generateTopicalPlan(params: {
+export function generateTopicalPlan(params: {
   id: string
   name: string
   description: string
@@ -287,12 +276,15 @@ export async function generateTopicalPlan(params: {
   tags?: string[]
   author?: string
   version?: string
-}): Promise<PrecalculatedDailyPlanSchema> {
+}): PrecalculatedDailyPlanSchema {
   const { id, name, description, topics, readingsPerDay = 1, tags, author, version } = params
 
-  const bibleData = await getBibleBookData()
+  const bibleData = getBibleBookData()
   const dailyReadings: ReadingPortion[][] = []
   let currentDay: ReadingPortion[] = []
+
+  // Track reading counts per book
+  const bookReadingCounts: Record<number, number> = {}
 
   // Flatten all readings from all topics
   const allReadings: ReadingPortion[] = []
@@ -312,6 +304,12 @@ export async function generateTopicalPlan(params: {
         bookName: bookData.name,
         verses: reading.verses,
       })
+
+      // Track reading count for this book
+      if (!bookReadingCounts[bookData.bookCode]) {
+        bookReadingCounts[bookData.bookCode] = 0
+      }
+      bookReadingCounts[bookData.bookCode]++
     }
   }
 
@@ -340,6 +338,7 @@ export async function generateTopicalPlan(params: {
     author,
     version,
     dailyReadings,
+    bookReadingCounts,
   }
 }
 
@@ -348,7 +347,7 @@ export async function generateTopicalPlan(params: {
  * @param params Configuration parameters for the chronological plan
  * @returns A precalculated daily reading plan
  */
-export async function generateChronologicalPlan(params: {
+export function generateChronologicalPlan(params: {
   id: string
   name: string
   description: string
@@ -358,7 +357,7 @@ export async function generateChronologicalPlan(params: {
   tags?: string[]
   author?: string
   version?: string
-}): Promise<PrecalculatedDailyPlanSchema> {
+}): PrecalculatedDailyPlanSchema {
   const {
     id,
     name,
@@ -371,10 +370,13 @@ export async function generateChronologicalPlan(params: {
     version,
   } = params
 
-  const bibleData = await getBibleBookData()
+  const bibleData = getBibleBookData()
   const dailyReadings: ReadingPortion[][] = []
   let currentDay: ReadingPortion[] = []
   let dayCount = 0
+
+  // Track reading counts per book
+  const bookReadingCounts: Record<number, number> = {}
 
   for (const item of chronologicalSequence) {
     const bookData = bibleData.find((book) => book.bookCode === item.bookCode)
@@ -390,6 +392,12 @@ export async function generateChronologicalPlan(params: {
       bookName: bookData.name,
       verses: item.verses,
     })
+
+    // Track reading count for this book
+    if (!bookReadingCounts[bookData.bookCode]) {
+      bookReadingCounts[bookData.bookCode] = 0
+    }
+    bookReadingCounts[bookData.bookCode]++
 
     if (currentDay.length >= readingsPerDay) {
       dailyReadings.push([...currentDay])
@@ -418,6 +426,7 @@ export async function generateChronologicalPlan(params: {
     author,
     version,
     dailyReadings,
+    bookReadingCounts,
   }
 }
 
