@@ -1,0 +1,1124 @@
+[
+  {
+    "bookCode": 1,
+    "osisName": "Gen",
+    "testament": "OT",
+    "division": "Pentateuch",
+    "author": "Moses",
+    "summary": "Genesis tells the story of creation, the fall of man, the flood, and the patriarchs: Abraham, Isaac, Jacob, and Joseph.",
+    "keywords": [
+      "Creation",
+      "Covenant",
+      "Patriarchs",
+      "Israel"
+    ],
+    "verseCount": 1533,
+    "language": "Hebrew",
+    "readingTimeMinutes": 270
+  },
+  {
+    "bookCode": 2,
+    "osisName": "Exod",
+    "testament": "OT",
+    "division": "Pentateuch",
+    "author": "Moses",
+    "summary": "Exodus describes the liberation of the Israelites from slavery in Egypt and their journey to Mount Sinai, where they receive the Ten Commandments.",
+    "keywords": [
+      "Liberation",
+      "Law",
+      "Covenant",
+      "Ten Commandments"
+    ],
+    "verseCount": 1213,
+    "language": "Hebrew",
+    "readingTimeMinutes": 225
+  },
+  {
+    "bookCode": 3,
+    "osisName": "Lev",
+    "testament": "OT",
+    "division": "Pentateuch",
+    "author": "Moses",
+    "summary": "Leviticus outlines the laws and rituals for worship, sacrifices, and holy living for the Israelites.",
+    "keywords": [
+      "Law",
+      "Sacrifice",
+      "Holiness",
+      "Priesthood"
+    ],
+    "verseCount": 859,
+    "language": "Hebrew",
+    "readingTimeMinutes": 120
+  },
+  {
+    "bookCode": 4,
+    "osisName": "Num",
+    "testament": "OT",
+    "division": "Pentateuch",
+    "author": "Moses",
+    "summary": "Numbers details the wilderness wanderings of the Israelites and the census taken of the tribes.",
+    "keywords": [
+      "Wilderness",
+      "Census",
+      "Israel",
+      "Journey"
+    ],
+    "verseCount": 1289,
+    "language": "Hebrew",
+    "readingTimeMinutes": 165
+  },
+  {
+    "bookCode": 5,
+    "osisName": "Deut",
+    "testament": "OT",
+    "division": "Pentateuch",
+    "author": "Moses",
+    "summary": "Deuteronomy is a series of speeches by Moses, giving a restatement of the Law to the Israelites before entering the Promised Land.",
+    "keywords": [
+      "Law",
+      "Covenant",
+      "Obedience",
+      "Moses"
+    ],
+    "verseCount": 959,
+    "language": "Hebrew",
+    "readingTimeMinutes": 150
+  },
+  {
+    "bookCode": 6,
+    "osisName": "Josh",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Joshua",
+    "summary": "Joshua recounts the conquest of Canaan and the division of the land among the tribes of Israel.",
+    "keywords": [
+      "Conquest",
+      "Canaan",
+      "Tribes",
+      "Promised Land"
+    ],
+    "verseCount": 658,
+    "language": "Hebrew",
+    "readingTimeMinutes": 120
+  },
+  {
+    "bookCode": 7,
+    "osisName": "Judg",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Samuel",
+    "summary": "Judges describes the cycle of sin, punishment, and deliverance in Israel through the leadership of judges.",
+    "keywords": [
+      "Judges",
+      "Deliverance",
+      "Cycle",
+      "Israel"
+    ],
+    "verseCount": 618,
+    "language": "Hebrew",
+    "readingTimeMinutes": 105
+  },
+  {
+    "bookCode": 8,
+    "osisName": "Ruth",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Samuel",
+    "summary": "Ruth tells the story of a Moabite woman who becomes part of the lineage of King David and ultimately Jesus Christ.",
+    "keywords": [
+      "Loyalty",
+      "Redemption",
+      "Lineage",
+      "David"
+    ],
+    "verseCount": 85,
+    "language": "Hebrew",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 9,
+    "osisName": "1Sam",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Samuel, Nathan, Gad",
+    "summary": "1 Samuel details the transition of Israel from a confederation of tribes to a kingdom under Saul, with the rise of David.",
+    "keywords": [
+      "Kingdom",
+      "Saul",
+      "David",
+      "Prophet"
+    ],
+    "verseCount": 810,
+    "language": "Hebrew",
+    "readingTimeMinutes": 140
+  },
+  {
+    "bookCode": 10,
+    "osisName": "2Sam",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Samuel, Nathan, Gad",
+    "summary": "2 Samuel recounts the reign of King David, his victories, his sin, and the consequences that follow.",
+    "keywords": [
+      "David",
+      "Kingdom",
+      "Sin",
+      "Consequences"
+    ],
+    "verseCount": 695,
+    "language": "Hebrew",
+    "readingTimeMinutes": 120
+  },
+  {
+    "bookCode": 11,
+    "osisName": "1Kgs",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Jeremiah",
+    "summary": "1 Kings narrates the reign of Solomon and the division of the kingdom into Israel and Judah.",
+    "keywords": [
+      "Solomon",
+      "Temple",
+      "Division",
+      "Kings"
+    ],
+    "verseCount": 816,
+    "language": "Hebrew",
+    "readingTimeMinutes": 105
+  },
+  {
+    "bookCode": 12,
+    "osisName": "2Kgs",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Jeremiah",
+    "summary": "2 Kings continues the history of Israel and Judah, detailing the decline and fall of both kingdoms.",
+    "keywords": [
+      "Kings",
+      "Prophets",
+      "Exile",
+      "Judah"
+    ],
+    "verseCount": 719,
+    "language": "Hebrew",
+    "readingTimeMinutes": 120
+  },
+  {
+    "bookCode": 13,
+    "osisName": "1Chr",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Ezra",
+    "summary": "1 Chronicles recounts the genealogy from Adam to David and focuses on the reign of King David.",
+    "keywords": [
+      "Genealogy",
+      "David",
+      "Israel",
+      "Temple"
+    ],
+    "verseCount": 942,
+    "language": "Hebrew",
+    "readingTimeMinutes": 120
+  },
+  {
+    "bookCode": 14,
+    "osisName": "2Chr",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Ezra",
+    "summary": "2 Chronicles focuses on the history of Judah, the temple, and the reforms of the kings, ending with the Babylonian exile.",
+    "keywords": [
+      "Temple",
+      "Kings",
+      "Judah",
+      "Reforms"
+    ],
+    "verseCount": 822,
+    "language": "Hebrew",
+    "readingTimeMinutes": 150
+  },
+  {
+    "bookCode": 15,
+    "osisName": "Ezra",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Ezra",
+    "summary": "Ezra tells the story of the return of the Jews from exile in Babylon and the rebuilding of the temple in Jerusalem.",
+    "keywords": [
+      "Return",
+      "Temple",
+      "Rebuilding",
+      "Law"
+    ],
+    "verseCount": 280,
+    "language": "Hebrew",
+    "readingTimeMinutes": 60
+  },
+  {
+    "bookCode": 16,
+    "osisName": "Neh",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Nehemiah",
+    "summary": "Nehemiah continues the story of the return from exile and focuses on the rebuilding of Jerusalem's walls.",
+    "keywords": [
+      "Walls",
+      "Rebuilding",
+      "Jerusalem",
+      "Reforms"
+    ],
+    "verseCount": 406,
+    "language": "Hebrew",
+    "readingTimeMinutes": 70
+  },
+  {
+    "bookCode": 17,
+    "osisName": "Esth",
+    "testament": "OT",
+    "division": "Historical",
+    "author": "Mordecai",
+    "summary": "Esther tells the story of a Jewish queen of Persia who saves her people from a plot to destroy them.",
+    "keywords": [
+      "Queen",
+      "Purim",
+      "Jewish",
+      "Deliverance"
+    ],
+    "verseCount": 167,
+    "language": "Hebrew",
+    "readingTimeMinutes": 40
+  },
+  {
+    "bookCode": 18,
+    "osisName": "Job",
+    "testament": "OT",
+    "division": "Poetry-Wisdom",
+    "author": "Unknown",
+    "summary": "Job explores the themes of suffering, justice, and faith through the experiences of its titular character.",
+    "keywords": [
+      "Suffering",
+      "Faith",
+      "Justice",
+      "Wisdom"
+    ],
+    "verseCount": 1070,
+    "language": "Hebrew",
+    "readingTimeMinutes": 140
+  },
+  {
+    "bookCode": 19,
+    "osisName": "Ps",
+    "testament": "OT",
+    "division": "Poetry-Wisdom",
+    "author": "David, Asaph, Sons of Korah, others",
+    "summary": "Psalms is a collection of songs and prayers expressing the full range of human emotions before God.",
+    "keywords": [
+      "Worship",
+      "Praise",
+      "Prayer",
+      "Lament"
+    ],
+    "verseCount": 2461,
+    "language": "Hebrew",
+    "readingTimeMinutes": 285
+  },
+  {
+    "bookCode": 20,
+    "osisName": "Prov",
+    "testament": "OT",
+    "division": "Poetry-Wisdom",
+    "author": "Solomon, others",
+    "summary": "Proverbs offers wisdom on a wide range of topics, emphasizing moral living and the fear of the Lord.",
+    "keywords": [
+      "Wisdom",
+      "Morality",
+      "Instruction",
+      "Righteousness"
+    ],
+    "verseCount": 915,
+    "language": "Hebrew",
+    "readingTimeMinutes": 100
+  },
+  {
+    "bookCode": 21,
+    "osisName": "Eccl",
+    "testament": "OT",
+    "division": "Poetry-Wisdom",
+    "author": "Solomon",
+    "summary": "Ecclesiastes reflects on the meaning of life and the best way to live, often from a skeptical or pessimistic viewpoint.",
+    "keywords": [
+      "Meaning",
+      "Vanity",
+      "Life",
+      "Wisdom"
+    ],
+    "verseCount": 222,
+    "language": "Hebrew",
+    "readingTimeMinutes": 50
+  },
+  {
+    "bookCode": 22,
+    "osisName": "Song",
+    "testament": "OT",
+    "division": "Poetry-Wisdom",
+    "author": "Solomon",
+    "summary": "Song of Solomon is a lyrical poem celebrating love and the beauty of a romantic relationship.",
+    "keywords": [
+      "Love",
+      "Romance",
+      "Marriage",
+      "Beauty"
+    ],
+    "verseCount": 117,
+    "language": "Hebrew",
+    "readingTimeMinutes": 30
+  },
+  {
+    "bookCode": 23,
+    "osisName": "Isa",
+    "testament": "OT",
+    "division": "Major Prophets",
+    "author": "Isaiah",
+    "summary": "Isaiah contains prophecies of judgment and redemption, foretelling the coming of the Messiah and the salvation of the Lord.",
+    "keywords": [
+      "Messiah",
+      "Prophecy",
+      "Salvation",
+      "Judgment"
+    ],
+    "verseCount": 1292,
+    "language": "Hebrew",
+    "readingTimeMinutes": 225
+  },
+  {
+    "bookCode": 24,
+    "osisName": "Jer",
+    "testament": "OT",
+    "division": "Major Prophets",
+    "author": "Jeremiah",
+    "summary": "Jeremiah delivers prophecies of destruction to the kingdom of Judah and calls the people to repentance.",
+    "keywords": [
+      "Prophecy",
+      "Repentance",
+      "Judah",
+      "Destruction"
+    ],
+    "verseCount": 1364,
+    "language": "Hebrew",
+    "readingTimeMinutes": 180
+  },
+  {
+    "bookCode": 25,
+    "osisName": "Lam",
+    "testament": "OT",
+    "division": "Poetry-Wisdom",
+    "author": "Jeremiah",
+    "summary": "Lamentations is a series of poetic laments mourning the destruction of Jerusalem and the suffering of its people.",
+    "keywords": [
+      "Lament",
+      "Jerusalem",
+      "Suffering",
+      "Destruction"
+    ],
+    "verseCount": 154,
+    "language": "Hebrew",
+    "readingTimeMinutes": 25
+  },
+  {
+    "bookCode": 26,
+    "osisName": "Ezek",
+    "testament": "OT",
+    "division": "Major Prophets",
+    "author": "Ezekiel",
+    "summary": "Ezekiel contains visions, prophecies, and symbolic acts that warn of Jerusalem's destruction and offer hope for Israel's restoration.",
+    "keywords": [
+      "Vision",
+      "Judgment",
+      "Restoration",
+      "Prophecy"
+    ],
+    "verseCount": 1273,
+    "language": "Hebrew",
+    "readingTimeMinutes": 180
+  },
+  {
+    "bookCode": 27,
+    "osisName": "Dan",
+    "testament": "OT",
+    "division": "Major Prophets",
+    "author": "Daniel",
+    "summary": "Daniel contains historical narratives and apocalyptic visions, highlighting God's sovereignty over nations and the future.",
+    "keywords": [
+      "Prophecy",
+      "Vision",
+      "Sovereignty",
+      "Faith"
+    ],
+    "verseCount": 357,
+    "language": "Hebrew, Aramaic",
+    "readingTimeMinutes": 90
+  },
+  {
+    "bookCode": 28,
+    "osisName": "Hos",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Hosea",
+    "summary": "Hosea's prophecy uses his troubled marriage as a metaphor for Israel's unfaithfulness to God and calls for repentance.",
+    "keywords": [
+      "Unfaithfulness",
+      "Repentance",
+      "Covenant",
+      "Love"
+    ],
+    "verseCount": 197,
+    "language": "Hebrew",
+    "readingTimeMinutes": 45
+  },
+  {
+    "bookCode": 29,
+    "osisName": "Joel",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Joel",
+    "summary": "Joel calls for repentance in the wake of a devastating locust plague and prophesies about the coming 'Day of the Lord'.",
+    "keywords": [
+      "Locusts",
+      "Repentance",
+      "Day of the Lord",
+      "Prophecy"
+    ],
+    "verseCount": 73,
+    "language": "Hebrew",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 30,
+    "osisName": "Amos",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Amos",
+    "summary": "Amos denounces the social injustices of Israel and foretells God's judgment but also offers a vision of restoration.",
+    "keywords": [
+      "Justice",
+      "Judgment",
+      "Israel",
+      "Restoration"
+    ],
+    "verseCount": 146,
+    "language": "Hebrew",
+    "readingTimeMinutes": 30
+  },
+  {
+    "bookCode": 31,
+    "osisName": "Obad",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Obadiah",
+    "summary": "Obadiah's single chapter pronounces judgment against Edom for its betrayal of Israel.",
+    "keywords": [
+      "Edom",
+      "Judgment",
+      "Betrayal",
+      "Israel"
+    ],
+    "verseCount": 21,
+    "language": "Hebrew",
+    "readingTimeMinutes": 5
+  },
+  {
+    "bookCode": 32,
+    "osisName": "Jonah",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Jonah",
+    "summary": "Jonah recounts the story of a prophet who tries to flee from God's command to preach to Nineveh and ends up being swallowed by a great fish.",
+    "keywords": [
+      "Nineveh",
+      "Repentance",
+      "Prophet",
+      "Mercy"
+    ],
+    "verseCount": 48,
+    "language": "Hebrew",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 33,
+    "osisName": "Mic",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Micah",
+    "summary": "Micah warns of judgment against Israel and Judah for their injustices and foretells the coming of a ruler from Bethlehem.",
+    "keywords": [
+      "Judgment",
+      "Injustice",
+      "Messiah",
+      "Restoration"
+    ],
+    "verseCount": 105,
+    "language": "Hebrew",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 34,
+    "osisName": "Nah",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Nahum",
+    "summary": "Nahum prophesies the fall of Nineveh, the capital of Assyria, as divine retribution for its cruelty.",
+    "keywords": [
+      "Nineveh",
+      "Judgment",
+      "Retribution",
+      "Assyria"
+    ],
+    "verseCount": 47,
+    "language": "Hebrew",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 35,
+    "osisName": "Hab",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Habakkuk",
+    "summary": "Habakkuk dialogues with God, questioning His justice, and concludes with a hymn of faith.",
+    "keywords": [
+      "Justice",
+      "Faith",
+      "Questioning",
+      "Dialogue"
+    ],
+    "verseCount": 56,
+    "language": "Hebrew",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 36,
+    "osisName": "Zeph",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Zephaniah",
+    "summary": "Zephaniah proclaims the coming 'Day of the Lord' as a time of judgment and restoration for Judah.",
+    "keywords": [
+      "Day of the Lord",
+      "Judgment",
+      "Restoration",
+      "Hope"
+    ],
+    "verseCount": 53,
+    "language": "Hebrew",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 37,
+    "osisName": "Hag",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Haggai",
+    "summary": "Haggai urges the returned exiles to rebuild the temple in Jerusalem, promising God's blessing on their efforts.",
+    "keywords": [
+      "Temple",
+      "Rebuilding",
+      "Blessing",
+      "Obedience"
+    ],
+    "verseCount": 38,
+    "language": "Hebrew",
+    "readingTimeMinutes": 10
+  },
+  {
+    "bookCode": 38,
+    "osisName": "Zech",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Zechariah",
+    "summary": "Zechariah contains visions, prophecies, and symbolic acts that encourage the rebuilding of the temple and point to the coming of the Messiah.",
+    "keywords": [
+      "Visions",
+      "Messiah",
+      "Rebuilding",
+      "Prophecy"
+    ],
+    "verseCount": 211,
+    "language": "Hebrew",
+    "readingTimeMinutes": 45
+  },
+  {
+    "bookCode": 39,
+    "osisName": "Mal",
+    "testament": "OT",
+    "division": "Minor Prophets",
+    "author": "Malachi",
+    "summary": "Malachi rebukes the Israelites for their lax religious practices and foretells the coming of 'Elijah' before the Day of the Lord.",
+    "keywords": [
+      "Rebuke",
+      "Day of the Lord",
+      "Elijah",
+      "Covenant"
+    ],
+    "verseCount": 55,
+    "language": "Hebrew",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 40,
+    "osisName": "Matt",
+    "testament": "NT",
+    "division": "Gospels",
+    "author": "Matthew",
+    "summary": "Matthew presents Jesus as the Messiah, the fulfillment of Old Testament prophecy, emphasizing His teachings and parables.",
+    "keywords": [
+      "Messiah",
+      "Kingdom",
+      "Teaching",
+      "Prophecy"
+    ],
+    "verseCount": 1071,
+    "language": "Greek",
+    "readingTimeMinutes": 150
+  },
+  {
+    "bookCode": 41,
+    "osisName": "Mark",
+    "testament": "NT",
+    "division": "Gospels",
+    "author": "Mark",
+    "summary": "Mark is a fast-paced account of Jesus' ministry, emphasizing His actions and miracles as the Son of God.",
+    "keywords": [
+      "Son of God",
+      "Miracles",
+      "Servant",
+      "Gospel"
+    ],
+    "verseCount": 678,
+    "language": "Greek",
+    "readingTimeMinutes": 90
+  },
+  {
+    "bookCode": 42,
+    "osisName": "Luke",
+    "testament": "NT",
+    "division": "Gospels",
+    "author": "Luke",
+    "summary": "Luke provides a detailed and orderly account of Jesus' life, teachings, death, and resurrection, emphasizing His compassion and universal message.",
+    "keywords": [
+      "Compassion",
+      "Salvation",
+      "Gentiles",
+      "Universal"
+    ],
+    "verseCount": 1151,
+    "language": "Greek",
+    "readingTimeMinutes": 135
+  },
+  {
+    "bookCode": 43,
+    "osisName": "John",
+    "testament": "NT",
+    "division": "Gospels",
+    "author": "John",
+    "summary": "John presents Jesus as the eternal Word of God, emphasizing His divinity, miracles, and the significance of belief in Him.",
+    "keywords": [
+      "Divinity",
+      "Word",
+      "Belief",
+      "Miracles"
+    ],
+    "verseCount": 879,
+    "language": "Greek",
+    "readingTimeMinutes": 120
+  },
+  {
+    "bookCode": 44,
+    "osisName": "Acts",
+    "testament": "NT",
+    "division": "Acts",
+    "author": "Luke",
+    "summary": "Acts chronicles the early church's growth and spread of the Gospel after Jesus' ascension, focusing on the ministries of Peter and Paul.",
+    "keywords": [
+      "Church",
+      "Holy Spirit",
+      "Gospel",
+      "Missions"
+    ],
+    "verseCount": 1007,
+    "language": "Greek",
+    "readingTimeMinutes": 150
+  },
+  {
+    "bookCode": 45,
+    "osisName": "Rom",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Romans is a theological treatise that explains the righteousness of God, justification by faith, and the implications of the Gospel.",
+    "keywords": [
+      "Justification",
+      "Faith",
+      "Righteousness",
+      "Gospel"
+    ],
+    "verseCount": 433,
+    "language": "Greek",
+    "readingTimeMinutes": 90
+  },
+  {
+    "bookCode": 46,
+    "osisName": "1Cor",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "1 Corinthians addresses various issues in the Corinthian church, including divisions, immorality, and spiritual gifts.",
+    "keywords": [
+      "Church",
+      "Unity",
+      "Gifts",
+      "Resurrection"
+    ],
+    "verseCount": 437,
+    "language": "Greek",
+    "readingTimeMinutes": 80
+  },
+  {
+    "bookCode": 47,
+    "osisName": "2Cor",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "2 Corinthians defends Paul's apostleship, discusses the nature of the new covenant, and addresses the challenges of Christian ministry.",
+    "keywords": [
+      "Ministry",
+      "Apostleship",
+      "Suffering",
+      "Reconciliation"
+    ],
+    "verseCount": 257,
+    "language": "Greek",
+    "readingTimeMinutes": 60
+  },
+  {
+    "bookCode": 48,
+    "osisName": "Gal",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Galatians emphasizes justification by faith alone and warns against returning to the legalistic practices of the law.",
+    "keywords": [
+      "Faith",
+      "Law",
+      "Freedom",
+      "Justification"
+    ],
+    "verseCount": 149,
+    "language": "Greek",
+    "readingTimeMinutes": 40
+  },
+  {
+    "bookCode": 49,
+    "osisName": "Eph",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Ephesians emphasizes the unity of the church in Christ and the spiritual blessings believers have in Him.",
+    "keywords": [
+      "Unity",
+      "Church",
+      "Grace",
+      "Armor of God"
+    ],
+    "verseCount": 155,
+    "language": "Greek",
+    "readingTimeMinutes": 30
+  },
+  {
+    "bookCode": 50,
+    "osisName": "Phil",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Philippians is a letter of encouragement and joy, written by Paul while imprisoned, urging the church to rejoice in the Lord.",
+    "keywords": [
+      "Joy",
+      "Rejoice",
+      "Christ",
+      "Contentment"
+    ],
+    "verseCount": 104,
+    "language": "Greek",
+    "readingTimeMinutes": 25
+  },
+  {
+    "bookCode": 51,
+    "osisName": "Col",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Colossians focuses on the supremacy of Christ and warns against false teachings that detract from the Gospel.",
+    "keywords": [
+      "Supremacy of Christ",
+      "Gospel",
+      "False Teaching",
+      "Faith"
+    ],
+    "verseCount": 95,
+    "language": "Greek",
+    "readingTimeMinutes": 25
+  },
+  {
+    "bookCode": 52,
+    "osisName": "1Thess",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "1 Thessalonians encourages the believers to remain faithful and to live in readiness for the return of Christ.",
+    "keywords": [
+      "Faithfulness",
+      "Second Coming",
+      "Encouragement",
+      "Hope"
+    ],
+    "verseCount": 89,
+    "language": "Greek",
+    "readingTimeMinutes": 25
+  },
+  {
+    "bookCode": 53,
+    "osisName": "2Thess",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "2 Thessalonians addresses misunderstandings about the Day of the Lord and encourages perseverance in the faith.",
+    "keywords": [
+      "Day of the Lord",
+      "Perseverance",
+      "Faith",
+      "Judgment"
+    ],
+    "verseCount": 47,
+    "language": "Greek",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 54,
+    "osisName": "1Tim",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "1 Timothy offers practical instructions on church leadership, conduct, and doctrine, emphasizing the importance of sound teaching.",
+    "keywords": [
+      "Leadership",
+      "Doctrine",
+      "Conduct",
+      "Church"
+    ],
+    "verseCount": 113,
+    "language": "Greek",
+    "readingTimeMinutes": 30
+  },
+  {
+    "bookCode": 55,
+    "osisName": "2Tim",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "2 Timothy is Paul's final letter, urging Timothy to remain faithful in ministry and to endure suffering for the sake of the Gospel.",
+    "keywords": [
+      "Faithfulness",
+      "Endurance",
+      "Gospel",
+      "Suffering"
+    ],
+    "verseCount": 83,
+    "language": "Greek",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 56,
+    "osisName": "Titus",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Titus provides instructions on church organization, sound teaching, and good works, emphasizing the need for believers to live upright lives.",
+    "keywords": [
+      "Good Works",
+      "Sound Teaching",
+      "Church",
+      "Godliness"
+    ],
+    "verseCount": 46,
+    "language": "Greek",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 57,
+    "osisName": "Phlm",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Paul",
+    "summary": "Philemon is a personal letter from Paul to a fellow believer, urging him to welcome back his runaway slave, Onesimus, as a brother in Christ.",
+    "keywords": [
+      "Forgiveness",
+      "Brotherhood",
+      "Reconciliation",
+      "Slavery"
+    ],
+    "verseCount": 25,
+    "language": "Greek",
+    "readingTimeMinutes": 5
+  },
+  {
+    "bookCode": 58,
+    "osisName": "Heb",
+    "testament": "NT",
+    "division": "Pauline Epistles",
+    "author": "Unknown",
+    "summary": "Hebrews emphasizes the superiority of Christ over the old covenant and encourages believers to persevere in their faith.",
+    "keywords": [
+      "Covenant",
+      "Faith",
+      "Superiority of Christ",
+      "Perseverance"
+    ],
+    "verseCount": 303,
+    "language": "Greek",
+    "readingTimeMinutes": 60
+  },
+  {
+    "bookCode": 59,
+    "osisName": "Jas",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "James",
+    "summary": "James is a practical letter that emphasizes the importance of living out one's faith through good works and godly behavior.",
+    "keywords": [
+      "Faith and Works",
+      "Wisdom",
+      "Speech",
+      "Behavior"
+    ],
+    "verseCount": 108,
+    "language": "Greek",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 60,
+    "osisName": "1Pet",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "Peter",
+    "summary": "1 Peter encourages believers to stand firm in their faith amidst persecution, emphasizing hope and holiness.",
+    "keywords": [
+      "Suffering",
+      "Hope",
+      "Holiness",
+      "Persecution"
+    ],
+    "verseCount": 105,
+    "language": "Greek",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 61,
+    "osisName": "2Pet",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "Peter",
+    "summary": "2 Peter warns against false teachers and emphasizes the importance of growing in the knowledge of Christ.",
+    "keywords": [
+      "False Teachers",
+      "Growth",
+      "Knowledge",
+      "Second Coming"
+    ],
+    "verseCount": 61,
+    "language": "Greek",
+    "readingTimeMinutes": 15
+  },
+  {
+    "bookCode": 62,
+    "osisName": "1John",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "John",
+    "summary": "1 John emphasizes the importance of love, truth, and living in fellowship with God, warning against false teachings.",
+    "keywords": [
+      "Love",
+      "Fellowship",
+      "Truth",
+      "Assurance"
+    ],
+    "verseCount": 105,
+    "language": "Greek",
+    "readingTimeMinutes": 20
+  },
+  {
+    "bookCode": 63,
+    "osisName": "2John",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "John",
+    "summary": "2 John warns against false teachers and emphasizes the importance of abiding in the truth and love.",
+    "keywords": [
+      "Truth",
+      "Love",
+      "False Teachers",
+      "Warning"
+    ],
+    "verseCount": 13,
+    "language": "Greek",
+    "readingTimeMinutes": 5
+  },
+  {
+    "bookCode": 64,
+    "osisName": "3John",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "John",
+    "summary": "3 John encourages hospitality toward faithful ministers of the Gospel and warns against prideful leaders.",
+    "keywords": [
+      "Hospitality",
+      "Faithfulness",
+      "Leadership",
+      "Truth"
+    ],
+    "verseCount": 14,
+    "language": "Greek",
+    "readingTimeMinutes": 5
+  },
+  {
+    "bookCode": 65,
+    "osisName": "Jude",
+    "testament": "NT",
+    "division": "General Epistles",
+    "author": "Jude",
+    "summary": "Jude warns against ungodly people who have infiltrated the church and encourages believers to contend for the faith.",
+    "keywords": [
+      "Contend",
+      "Faith",
+      "Ungodliness",
+      "Judgment"
+    ],
+    "verseCount": 25,
+    "language": "Greek",
+    "readingTimeMinutes": 10
+  },
+  {
+    "bookCode": 66,
+    "osisName": "Rev",
+    "testament": "NT",
+    "division": "Revelation",
+    "author": "John",
+    "summary": "Revelation is a prophetic vision given to John, revealing the end times, the return of Christ, and the final victory of God over evil.",
+    "keywords": [
+      "Prophecy",
+      "End Times",
+      "Judgment",
+      "Victory"
+    ],
+    "verseCount": 404,
+    "language": "Greek",
+    "readingTimeMinutes": 90
+  }
+]
