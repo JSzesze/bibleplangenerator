@@ -497,6 +497,15 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
 
     return (
       <div className="flex-1 flex flex-col">
+        {/* Breadcrumb navigation */}
+        {/* <nav className="text-xs text-gray-400 flex items-center gap-1 mt-4 mb-2" aria-label="Breadcrumb">
+          <span className="hover:text-gray-200 cursor-pointer">Home</span>
+          <span className="mx-1">/</span>
+          <span className="hover:text-gray-200 cursor-pointer">Plan Wizard</span>
+          <span className="mx-1">/</span>
+          <span className="text-gray-300">Stream-by-Stream</span>
+        </nav> */}
+
         {/* Estimated Duration - very top, visually prominent */}
         <div className="mb-4">
           <div className="flex items-center justify-between bg-gray-800 rounded-md px-3 py-3 text-sm border-l-4"
@@ -648,6 +657,15 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
   // Main stream management screen
   return (
     <div className="flex-1 flex flex-col">
+      {/* Breadcrumb navigation */}
+      {/* <nav className="text-xs text-gray-400 flex items-center gap-1 mt-4 mb-2" aria-label="Breadcrumb">
+        <span className="hover:text-gray-200 cursor-pointer">Home</span>
+        <span className="mx-1">/</span>
+        <span className="hover:text-gray-200 cursor-pointer">Plan Wizard</span>
+        <span className="mx-1">/</span>
+        <span className="text-gray-300">Stream-by-Stream</span>
+      </nav> */}
+
       {/* Heading and description */}
       <h1 className="text-2xl font-bold text-center mt-4 mb-2">Build Your Reading Plan</h1>
       <p className="text-center text-gray-400 text-base mb-6 max-w-xl mx-auto">

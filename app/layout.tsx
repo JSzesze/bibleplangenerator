@@ -6,9 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Bible Reading Plan Generator",
+  title: "BibleFlo",
   description: "Create personalized Bible reading plans",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({

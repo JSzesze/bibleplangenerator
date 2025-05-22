@@ -390,16 +390,6 @@ export default function BuildYourOwnFlow({ onComplete, onBack, duration }: Build
         >
           Next: Configure Streams
         </Button>
-        <div className="w-full max-w-md mt-auto pt-4">
-          <div className="w-full bg-gray-800 h-1 mb-4 rounded-full overflow-hidden">
-            <div className="bg-white h-full" style={{ width: `${(1 / 3) * 100}%` }}></div>
-          </div>
-          <div className="flex justify-between">
-            <Button variant="ghost" onClick={onBack}>
-              Back
-            </Button>
-          </div>
-        </div>
       </div>
     )
   }
