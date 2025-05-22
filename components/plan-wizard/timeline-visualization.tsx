@@ -85,9 +85,6 @@ export default function TimelineVisualization({
           // Check if we have detailed segment data for proportional display
           const hasSegments = proportional && stream.segments && stream.segments.length > 0
 
-          // Determine how many segments to show for non-proportional display
-          const segmentCount = stream.repetitions || 1
-
           return (
             <div key={index} className="h-16 rounded-md relative overflow-hidden">
               {/* For proportional visualization with segments */}
@@ -96,58 +93,38 @@ export default function TimelineVisualization({
                   {stream.segments!.map((segment, i) => (
                     <div
                       key={i}
-                      className={`${getStreamColor(segment.type, segment.label, segment.color)} rounded-md`}
+                      className={
+                        `${getStreamColor(segment.type, stream.label, segment.color)} rounded-md` +
+                        (segment.size < 1 ? " opacity-60" : "")
+                      }
                       style={{
                         flexGrow: isNaN(segment.size) ? 1 : segment.size, // Prevent NaN values
                         flexBasis: 0,
                         flexShrink: 0,
+                        minWidth: segment.size < 0.2 ? "12px" : undefined,
                       }}
-                    >
-                      {segment.label && (
-                        <div className="text-xs text-white text-center truncate px-1 pt-1">{segment.label}</div>
-                      )}
-                    </div>
+                    ></div>
                   ))}
                 </div>
-              ) : segmentCount <= 1 ? (
-                // For single segment (non-proportional)
+              ) : (
+                // Fallback for non-segment plans
                 <div
                   className={`absolute inset-0 ${getStreamColor(stream.type, undefined, stream.color)} rounded-md`}
                 ></div>
-              ) : (
-                // For multiple segments (non-proportional)
-                <div className="absolute inset-0 flex space-x-1">
-                  {/* Generate the appropriate number of segments */}
-                  {Array.from({ length: Math.min(segmentCount, 5) }, (_, i) => (
-                    <div
-                      key={i}
-                      className={`flex-1 ${getStreamColor(stream.type, undefined, stream.color)} rounded-md`}
-                    ></div>
-                  ))}
-
-                  {/* If there are more than 5 segments, add an ellipsis segment */}
-                  {segmentCount > 5 && (
-                    <div
-                      className={`flex-1 ${getStreamColor(stream.type, undefined, stream.color)} rounded-md flex items-center justify-center`}
-                    >
-                      <div className="text-white text-xs font-bold">+{segmentCount - 5}</div>
-                    </div>
-                  )}
-                </div>
               )}
 
               {/* Stream label */}
               <div className="absolute inset-0 flex items-center px-4">
                 <span className="text-sm font-medium z-10">{stream.label}</span>
 
-                {/* Always show chapter count if available */}
-                {stream.totalChapters ? (
+                {/* Show repetitions badge for Horner-style plans */}
+                {typeof stream.repetitions === "number" && stream.repetitions > 1 ? (
+                  <span className="text-xs ml-2 bg-black bg-opacity-50 px-1.5 py-0.5 rounded-full">
+                    x{stream.repetitions}
+                  </span>
+                ) : stream.totalChapters ? (
                   <span className="text-xs ml-2 bg-black bg-opacity-50 px-1.5 py-0.5 rounded-full">
                     {stream.totalChapters} chapters
-                  </span>
-                ) : segmentCount > 1 ? (
-                  <span className="text-xs ml-2 bg-black bg-opacity-50 px-1.5 py-0.5 rounded-full">
-                    {segmentCount} divisions
                   </span>
                 ) : null}
               </div>

@@ -1,3 +1,7 @@
+// TODO: This Example Plans page is intended for future use.
+// It will be integrated into the main navigation when ready for users.
+// Supporting files (lib/example-plans.ts, lib/books.ts) are intentionally kept for this purpose.
+
 "use client"
 
 import { useEffect, useState } from "react"

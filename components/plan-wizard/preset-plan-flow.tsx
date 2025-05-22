@@ -102,8 +102,43 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
 
   // Function to generate stream visualization data
   const generateStreamVisualization = (streams: any[]) => {
-    return streams.map((stream) => {
-      // Determine stream type based on book codes
+    console.log("[DEBUG] Input streams:", streams)
+    // If all streams have a 'label' property (Horner), just map them directly
+    if (streams.every((s) => s.label)) {
+      // Calculate repetitions for each list
+      const totalPlanDays = duration.type === "months" ? duration.value * 30 : duration.value * 7
+      const result = streams.map((stream) => {
+        // Sum chapters for this list
+        const totalChapters = stream.bookCodes.reduce((sum: number, code: number) => {
+          const book = bibleBooks.find((b: any) => b.bookCode === code)
+          return sum + (book ? book.chapters : 0)
+        }, 0)
+        // Calculate repetitions (rounded to 1 decimal)
+        const repetitions = totalChapters > 0 ? Number((totalPlanDays / totalChapters).toFixed(2)) : 1
+        const fullRepeats = Math.floor(repetitions)
+        let partialRepeat = Math.round((repetitions - fullRepeats) * 100) / 100
+        // Only add partial if it's visually meaningful
+        const segments = [
+          ...Array(fullRepeats).fill({ type: "custom", size: 1 }),
+          ...(partialRepeat > 0.05 ? [{ type: "custom", size: partialRepeat }] : []),
+        ]
+        return {
+          type: "custom",
+          label: stream.label,
+          repetitions,
+          segments,
+          color: undefined,
+        }
+      })
+      console.log("[DEBUG] Horner visualization output:", result)
+      if (result.length !== 10) {
+        console.warn("[DEBUG] Horner plan should have 10 streams, got:", result.length)
+      }
+      return result
+    }
+    // Otherwise, fall back to previous logic
+    const fallback = streams.map((stream) => {
+      // Otherwise, fall back to previous logic
       const firstBookCode = stream.bookCodes[0]
       const lastBookCode = stream.bookCodes[stream.bookCodes.length - 1]
 
@@ -114,7 +149,7 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
       if (
         firstBookCode >= 1 &&
         lastBookCode <= 39 &&
-        !stream.bookCodes.some((code) => [18, 19, 20, 21, 22].includes(code))
+        !stream.bookCodes.some((code: number) => [18, 19, 20, 21, 22].includes(code))
       ) {
         streamType = "ot"
         label = "Old Testament"
@@ -125,7 +160,7 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
         label = "New Testament"
       }
       // Check if stream is Wisdom Books
-      else if (stream.bookCodes.every((code) => [18, 19, 20, 21, 22].includes(code))) {
+      else if (stream.bookCodes.every((code: number) => [18, 19, 20, 21, 22].includes(code))) {
         streamType = "wisdom"
         label = "Wisdom Books"
       }
@@ -135,19 +170,19 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
         label = "Psalms"
       }
       // Check if stream is Pentateuch
-      else if (stream.bookCodes.every((code) => code >= 1 && code <= 5)) {
+      else if (stream.bookCodes.every((code: number) => code >= 1 && code <= 5)) {
         streamType = "ot"
         label = "Pentateuch"
       }
       // Check if stream is Gospels
-      else if (stream.bookCodes.every((code) => code >= 40 && code <= 43)) {
+      else if (stream.bookCodes.every((code: number) => code >= 40 && code <= 43)) {
         streamType = "nt"
         label = "Gospels"
       }
       // Mixed stream or other
       else {
         // Try to create a descriptive label
-        const bookNames = stream.bookCodes.map((code) => {
+        const bookNames = stream.bookCodes.map((code: number) => {
           const book = bibleBooks.find((b) => b.bookCode === code)
           return book ? book.name : `Book ${code}`
         })
@@ -162,9 +197,11 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
       return {
         type: streamType,
         label,
-        repetitions: stream.bookCodes.length > 5 ? 2 : 1, // Simulate repetitions for visualization
+        repetitions: stream.bookCodes.length > 5 ? 2 : 1,
       }
     })
+    console.log("[DEBUG] Fallback visualization output:", fallback)
+    return fallback
   }
 
   const handleSelectPreset = (presetId: string) => {
@@ -184,6 +221,10 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
         totalPlanDays: duration.type === "months" ? duration.value * 30 : duration.value * 7,
       })
     }
+  }
+
+  if (streamVisualization.length > 0) {
+    console.log("TimelineVisualization props:", streamVisualization)
   }
 
   return (
@@ -244,8 +285,10 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
                   type: stream.type as "ot" | "nt" | "wisdom" | "custom",
                   label: stream.label,
                   repetitions: stream.repetitions,
+                  segments: stream.segments,
                   color: presets.find((p) => p.id === selectedPreset)?.color,
                 }))}
+                proportional={true}
               />
             ) : null}
           </div>

@@ -165,16 +165,16 @@ export function createWorkweekConfig() {
 export function createHornerConfig() {
   return {
     streams: [
-      { bookCodes: [1, 2, 3, 4, 5] }, // Stream 1: Pentateuch
-      { bookCodes: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17] }, // Stream 2: History
-      { bookCodes: [18, 19, 20, 21, 22] }, // Stream 3: Wisdom
-      { bookCodes: [23, 24, 25, 26, 27] }, // Stream 4: Major Prophets
-      { bookCodes: [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] }, // Stream 5: Minor Prophets
-      { bookCodes: [40, 41, 42, 43] }, // Stream 6: Gospels
-      { bookCodes: [44] }, // Stream 7: Acts
-      { bookCodes: [45, 46, 47, 48, 49, 50, 51, 52, 53] }, // Stream 8: Romans to 2 Thessalonians
-      { bookCodes: [54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65] }, // Stream 9: 1 Timothy to Jude
-      { bookCodes: [66] }, // Stream 10: Revelation
+      { bookCodes: [1, 2, 3, 4, 5], label: "Pentateuch" }, // Genesis-Deuteronomy
+      { bookCodes: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], label: "OT History 1" }, // Joshua-2 Kings
+      { bookCodes: [18, 19, 20, 21, 22], label: "Poetry" }, // Job-Song of Solomon
+      { bookCodes: [23, 24, 25, 26, 27], label: "Major Prophets" }, // Isaiah-Daniel
+      { bookCodes: [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39], label: "Minor Prophets" }, // Hosea-Malachi
+      { bookCodes: [40, 41, 42, 43], label: "Gospels" }, // Matthew-John
+      { bookCodes: [44], label: "Acts" }, // Acts
+      { bookCodes: [45, 46, 47, 48, 49, 50, 51, 52, 53], label: "Pauline Epistles" }, // Romans-2 Thessalonians
+      { bookCodes: [54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65], label: "General Epistles" }, // 1 Timothy-Jude
+      { bookCodes: [66], label: "Revelation" }, // Revelation
     ],
     totalPlanDays: 365,
   }
