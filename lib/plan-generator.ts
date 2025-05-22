@@ -47,20 +47,6 @@ export interface BookSelection {
   endChapter?: number
 }
 
-export interface BibleBook {
-  name: string
-  chapters: number[]
-  // Additional fields based on your schema
-}
-
-export interface ReadingPlan {
-  title: string
-  days: {
-    day: number
-    readings: string[]
-  }[]
-}
-
 /**
  * Get Bible book data from the imported JSON file
  */
@@ -165,7 +151,7 @@ export function generateSequentialPlan(params: {
  * @param params Configuration parameters for the multi-stream plan
  * @returns A precalculated daily reading plan
  */
-export async function generateMultiStreamPlan(params: {
+export function generateMultiStreamPlan(params: {
   id: string
   name: string
   description: string
@@ -174,7 +160,7 @@ export async function generateMultiStreamPlan(params: {
   tags?: string[]
   author?: string
   version?: string
-}): Promise<PrecalculatedDailyPlanSchema> {
+}): PrecalculatedDailyPlanSchema {
   const { id, name, description, streams, totalPlanDays, tags, author, version } = params
 
   const bibleData = getBibleBookData()
