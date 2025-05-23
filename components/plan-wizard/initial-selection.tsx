@@ -84,25 +84,6 @@ export default function InitialSelection({
             variant="outline"
             className={cn(
               "w-full h-auto py-6 px-4 flex items-center justify-between text-xl border-gray-700 hover:bg-gray-800",
-              value === "custom" && "border-white bg-gray-800",
-            )}
-            onClick={() => onChange("custom")}
-          >
-            <div className="flex items-center">
-              <Settings className="h-6 w-6 mr-4 text-blue-500" />
-              <span>Build your own plan</span>
-            </div>
-            <div className="rounded-full w-6 h-6 border border-gray-500 flex items-center justify-center">
-              {value === "custom" && <div className="w-3 h-3 rounded-full bg-white"></div>}
-            </div>
-          </Button>
-        )}
-
-        {showCustomOption && (
-          <Button
-            variant="outline"
-            className={cn(
-              "w-full h-auto py-6 px-4 flex items-center justify-between text-xl border-gray-700 hover:bg-gray-800",
               value === "stream-by-stream" && "border-white bg-gray-800",
             )}
             onClick={() => onChange("stream-by-stream")}

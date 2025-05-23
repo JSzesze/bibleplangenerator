@@ -94,7 +94,7 @@ export default function TimelineVisualization({
                     <div
                       key={i}
                       className={
-                        `${getStreamColor(segment.type, stream.label, segment.color)} rounded-md` +
+                        `${getStreamColor(segment.type, stream.label, segment.color)} rounded-md relative flex items-center justify-center` +
                         (segment.size < 1 ? " opacity-60" : "")
                       }
                       style={{
@@ -103,7 +103,14 @@ export default function TimelineVisualization({
                         flexShrink: 0,
                         minWidth: segment.size < 0.2 ? "12px" : undefined,
                       }}
-                    ></div>
+                    >
+                      {/* Segment label */}
+                      {segment.label && segment.size > 0.15 && (
+                        <span className="text-xs font-medium text-white z-10 px-1 text-center">
+                          {segment.label}
+                        </span>
+                      )}
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -123,7 +130,7 @@ export default function TimelineVisualization({
                     x{stream.repetitions}
                   </span>
                 ) : stream.totalChapters ? (
-                  <span className="text-xs ml-2 bg-black bg-opacity-50 px-1.5 py-0.5 rounded-full">
+                  <span className={`text-xs bg-black bg-opacity-50 px-1.5 py-0.5 rounded-full ${stream.label ? 'ml-2' : 'ml-auto'}`}>
                     {stream.totalChapters} chapters
                   </span>
                 ) : null}

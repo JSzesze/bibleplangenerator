@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronRight, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -8,6 +8,9 @@ import ReadingPlanPreview from "./reading-plan-preview"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import TimelineVisualization from "./timeline-visualization"
 import { getBookCodesByTestament, getBookCodesByDivision, getBookByCode, getWisdomBookCodes } from "@/lib/book-utils"
+import DurationSelection from "./duration-selection"
+import bibleBooks from "@/constants/books.json"
+import { useBreadcrumb } from "./breadcrumb-context"
 
 interface WholeBibleFlowProps {
   onComplete: (config: WholeBibleConfig) => void
@@ -30,17 +33,35 @@ interface WisdomBooksSelectorProps {
   onCancel: () => void
 }
 
-export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBibleFlowProps) {
+export default function WholeBibleFlow({ onComplete, onBack, duration: initialDuration }: WholeBibleFlowProps) {
   const [step, setStep] = useState(1)
+  const [duration, setDuration] = useState(initialDuration)
   const [config, setConfig] = useState<WholeBibleConfig>({
     newTestamentPlacement: "alongside",
     wisdomBooksPlacement: "alongside",
     includedWisdomBooks: ["Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Job"],
   })
   const [showWisdomSelector, setShowWisdomSelector] = useState(false)
+  const { setItems } = useBreadcrumb()
+
+  // Update breadcrumbs based on current step
+  useEffect(() => {
+    const stepLabels = {
+      1: "Duration",
+      2: "New Testament",
+      3: "Wisdom Books"
+    }
+    
+    setItems([
+      { label: "Home", href: "/" },
+      { label: "Plan Wizard" },
+      { label: "Whole Bible" },
+      { label: stepLabels[step as keyof typeof stepLabels] || "Configuration" }
+    ])
+  }, [step, setItems])
 
   const handleNext = () => {
-    if (step < 2) {
+    if (step < 3) {
       setStep(step + 1)
     } else {
       onComplete(config)
@@ -53,6 +74,10 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
     } else {
       onBack()
     }
+  }
+
+  const handleCreate = () => {
+    onComplete(config)
   }
 
   const updateConfig = (key: keyof WholeBibleConfig, value: any) => {
@@ -69,7 +94,6 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
 
   // If no wisdom books are selected but placement is not "within", show a warning
   const showWisdomWarning = config.includedWisdomBooks.length === 0 && config.wisdomBooksPlacement !== "within"
-
   // If wisdom books placement is "within", disable the selector button
   const wisdomSelectorDisabled = config.wisdomBooksPlacement === "within"
 
@@ -87,6 +111,19 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
     <div className="flex-1 flex flex-col">
       {step === 1 && (
         <>
+          <DurationSelection
+            duration={duration}
+            onChange={setDuration}
+            section="whole-bible"
+            pathway=""
+            readingType="whole"
+            selectedBooks={[]}
+          />
+        </>
+      )}
+
+      {step === 2 && (
+        <>
           <h1 className="text-3xl font-bold text-center mb-8">
             How do you want to read
             <br />
@@ -94,11 +131,7 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
           </h1>
 
           <TimelineVisualization
-            streams={getWholeBibleTimelineStreams({
-              newTestamentPlacement: config.newTestamentPlacement,
-              wisdomBooksPlacement: "within", // Not relevant for this step
-              includedWisdomBooks: [],
-            })}
+            streams={getWholeBibleTimelineStreams(config)}
           />
 
           <div className="space-y-4 mt-10">
@@ -130,7 +163,7 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
         </>
       )}
 
-      {step === 2 && (
+      {step === 3 && (
         <>
           <h1 className="text-3xl font-bold text-center mb-8">
             How do you want to read
@@ -139,11 +172,7 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
           </h1>
 
           <TimelineVisualization
-            streams={getWholeBibleTimelineStreams({
-              newTestamentPlacement: config.newTestamentPlacement,
-              wisdomBooksPlacement: config.wisdomBooksPlacement,
-              includedWisdomBooks: config.includedWisdomBooks,
-            })}
+            streams={getWholeBibleTimelineStreams(config)}
           />
 
           <div className="space-y-4 mt-10">
@@ -153,7 +182,6 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
               isSelected={config.wisdomBooksPlacement === "alongside"}
               onClick={() => {
                 updateConfig("wisdomBooksPlacement", "alongside")
-                // If switching to "alongside" and no wisdom books are selected, select all by default
                 if (config.includedWisdomBooks.length === 0) {
                   updateConfig("includedWisdomBooks", ["Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Job"])
                 }
@@ -209,15 +237,15 @@ export default function WholeBibleFlow({ onComplete, onBack, duration }: WholeBi
 
       <div className="mt-auto pt-4">
         <div className="w-full bg-gray-800 h-1 mb-4 rounded-full overflow-hidden">
-          <div className="bg-white h-full" style={{ width: `${(step / 2) * 100}%` }}></div>
+          <div className="bg-white h-full" style={{ width: `${(step / 3) * 100}%` }}></div>
         </div>
 
         <div className="flex justify-between">
           <Button variant="ghost" onClick={handleBack}>
             Back
           </Button>
-          <Button onClick={handleNext} className="bg-white text-black hover:bg-gray-200" disabled={showWisdomWarning}>
-            {step === 2 ? "Next" : "Next"}
+          <Button onClick={handleNext} className="bg-white text-black hover:bg-gray-200" disabled={step === 3 && showWisdomWarning}>
+            {step === 3 ? "Finish" : "Next"}
           </Button>
         </div>
       </div>
@@ -334,73 +362,173 @@ function WisdomBooksSelector({ selectedBooks, onComplete, onCancel }: WisdomBook
   )
 }
 
-// Helper to build timeline streams for the whole-bible flow
-function getWholeBibleTimelineStreams(config: WholeBibleConfig): any[] {
+// Helper to build streams for the whole-bible flow at the book level
+function getWholeBibleStreams(config: WholeBibleConfig) {
   const { newTestamentPlacement, wisdomBooksPlacement, includedWisdomBooks } = config
 
   // Get all OT and NT book codes
-  const allOtBookCodes = getBookCodesByTestament("OT")
-  const ntBookCodes = getBookCodesByTestament("NT")
+  const allOtBookCodes = bibleBooks.filter((b: any) => b.testament === "OT").map((b: any) => b.bookCode)
+  const ntBookCodes = bibleBooks.filter((b: any) => b.testament === "NT").map((b: any) => b.bookCode)
   // Canonical wisdom book codes
-  const canonicalWisdomBookCodes = getWisdomBookCodes()
+  const canonicalWisdomBookCodes = [18, 19, 20, 21, 22] // Job, Psalms, Proverbs, Ecclesiastes, Song of Solomon
   // User-selected wisdom book codes (by code)
   const selectedWisdomBookCodes = canonicalWisdomBookCodes.filter(code => {
-    const book = getBookByCode(code)
+    const book = bibleBooks.find((b: any) => b.bookCode === code)
     return book && includedWisdomBooks.includes(book.name)
   })
-  // OT = all OT books minus selected wisdom books
-  const otBookCodes =
-    wisdomBooksPlacement === "alongside"
-      ? allOtBookCodes.filter((code) => !selectedWisdomBookCodes.includes(code))
-      : allOtBookCodes
-
-  const otChapters = otBookCodes.reduce((sum, code) => sum + (getBookByCode(code)?.chapters || 0), 0)
-  const ntChapters = ntBookCodes.reduce((sum, code) => sum + (getBookByCode(code)?.chapters || 0), 0)
-  const wisdomChapters = selectedWisdomBookCodes.reduce((sum, code) => sum + (getBookByCode(code)?.chapters || 0), 0)
 
   if (newTestamentPlacement === "after") {
-    // Single stream with segments for OT, NT, (Wisdom)
-    const segments = []
-    if (otChapters > 0) {
-      segments.push({ type: "ot" as const, label: "Old Testament", size: otChapters })
+    // Single stream: OT (with or without wisdom), then NT
+    let otBooks: number[]
+    if (wisdomBooksPlacement === "alongside") {
+      // Wisdom books are skipped in OT order
+      otBooks = allOtBookCodes.filter(code => !selectedWisdomBookCodes.includes(code))
+    } else {
+      // Wisdom books are included in canonical order
+      otBooks = allOtBookCodes
     }
-    if (ntChapters > 0) {
-      segments.push({ type: "nt" as const, label: "New Testament", size: ntChapters })
+    // One stream: OT (possibly minus wisdom), then wisdom (if within), then NT
+    let streamBooks = [...otBooks]
+    if (wisdomBooksPlacement === "alongside") {
+      // Wisdom books will be a segment, not a separate stream
+      streamBooks = [...otBooks, ...selectedWisdomBookCodes]
     }
-    if (wisdomBooksPlacement === "alongside" && wisdomChapters > 0) {
-      segments.push({ type: "wisdom" as const, label: "Wisdom Books", size: wisdomChapters })
+    streamBooks = [...streamBooks, ...ntBookCodes]
+    return [
+      { bookCodes: streamBooks }
+    ]
+  } else {
+    // 'alongside' NT: separate streams for OT, Wisdom, NT
+    let otBooks = allOtBookCodes
+    if (wisdomBooksPlacement === "alongside") {
+      otBooks = allOtBookCodes.filter(code => !selectedWisdomBookCodes.includes(code))
     }
-    // Normalize sizes
-    const total = segments.reduce((sum, seg) => sum + seg.size, 0)
-    segments.forEach((seg) => (seg.size = seg.size / total))
+    const streams = [
+      { bookCodes: otBooks },
+    ]
+    if (wisdomBooksPlacement === "alongside" && selectedWisdomBookCodes.length > 0) {
+      streams.push({ bookCodes: selectedWisdomBookCodes })
+    }
+    streams.push({ bookCodes: ntBookCodes })
+    return streams
+  }
+}
+
+// Helper to build timeline visualization streams from book-level streams
+function getWholeBibleTimelineStreams(config: WholeBibleConfig) {
+  const { newTestamentPlacement, wisdomBooksPlacement, includedWisdomBooks } = config;
+  
+  // Calculate chapter counts for each section
+  const allOtBookCodes = bibleBooks.filter((b: any) => b.testament === "OT").map((b: any) => b.bookCode);
+  const ntBookCodes = bibleBooks.filter((b: any) => b.testament === "NT").map((b: any) => b.bookCode);
+  const canonicalWisdomBookCodes = [18, 19, 20, 21, 22]; // Job, Psalms, Proverbs, Ecclesiastes, Song of Solomon
+  const selectedWisdomBookCodes = canonicalWisdomBookCodes.filter(code => {
+    const book = bibleBooks.find((b: any) => b.bookCode === code);
+    return book && includedWisdomBooks.includes(book.name);
+  });
+  
+  const otWithoutWisdomCodes = allOtBookCodes.filter(code => !canonicalWisdomBookCodes.includes(code));
+  
+  // Calculate chapter counts
+  const otWithWisdomChapters = allOtBookCodes.reduce((sum, code) => {
+    const book = bibleBooks.find((b: any) => b.bookCode === code);
+    return sum + (book ? book.chapters : 0);
+  }, 0);
+  
+  const otWithoutWisdomChapters = otWithoutWisdomCodes.reduce((sum, code) => {
+    const book = bibleBooks.find((b: any) => b.bookCode === code);
+    return sum + (book ? book.chapters : 0);
+  }, 0);
+  
+  const wisdomChapters = selectedWisdomBookCodes.reduce((sum, code) => {
+    const book = bibleBooks.find((b: any) => b.bookCode === code);
+    return sum + (book ? book.chapters : 0);
+  }, 0);
+  
+  const ntChapters = ntBookCodes.reduce((sum, code) => {
+    const book = bibleBooks.find((b: any) => b.bookCode === code);
+    return sum + (book ? book.chapters : 0);
+  }, 0);
+  
+  // Hard-code the four specific cases
+  if (newTestamentPlacement === "after" && wisdomBooksPlacement === "within") {
+    // Case 1: Single stream with OT (including wisdom) then NT
+    return [{
+      type: "custom" as const,
+      label: "",
+      segments: [
+        { type: "ot" as const, label: "OT", size: otWithWisdomChapters },
+        { type: "nt" as const, label: "NT", size: ntChapters }
+      ]
+    }];
+  }
+  
+  if (newTestamentPlacement === "after" && wisdomBooksPlacement === "alongside") {
+    // Case 2: Two streams - Main (OT without wisdom + NT), Wisdom separate
+    const streams = [];
+    
+    // Main stream with OT (no wisdom) + NT segments
+    streams.push({
+      type: "custom" as const,
+      label: "",
+      segments: [
+        { type: "ot" as const, label: "OT", size: otWithoutWisdomChapters },
+        { type: "nt" as const, label: "NT", size: ntChapters }
+      ]
+    });
+    
+    // Wisdom stream (if any wisdom books selected)
+    if (selectedWisdomBookCodes.length > 0) {
+      streams.push({
+        type: "wisdom" as const,
+        label: "Wisdom Books"
+      });
+    }
+    
+    return streams;
+  }
+  
+  if (newTestamentPlacement === "alongside" && wisdomBooksPlacement === "within") {
+    // Case 3: Two streams - OT (with wisdom), NT separate
     return [
       {
-        type: "custom",
-        label: "Whole Bible",
-        segments,
-        totalChapters: otChapters + ntChapters + wisdomChapters,
+        type: "ot" as const,
+        label: "Old Testament"
       },
-    ]
+      {
+        type: "nt" as const,
+        label: "New Testament"
+      }
+    ];
   }
-
-  // Alongside: separate streams for OT, Wisdom, NT
-  const streams: any[] = []
-  streams.push({
-    type: "ot",
-    label: "Old Testament",
-    totalChapters: otChapters,
-  })
-  if (wisdomBooksPlacement === "alongside" && wisdomChapters > 0) {
+  
+  if (newTestamentPlacement === "alongside" && wisdomBooksPlacement === "alongside") {
+    // Case 4: Three streams - OT (no wisdom), Wisdom, NT
+    const streams = [];
+    
     streams.push({
-      type: "wisdom",
-      label: "Wisdom Books",
-      totalChapters: wisdomChapters,
-    })
+      type: "ot" as const,
+      label: "Old Testament"
+    });
+    
+    if (selectedWisdomBookCodes.length > 0) {
+      streams.push({
+        type: "wisdom" as const,
+        label: "Wisdom Books"
+      });
+    }
+    
+    streams.push({
+      type: "nt" as const,
+      label: "New Testament"
+    });
+    
+    return streams;
   }
-  streams.push({
-    type: "nt",
-    label: "New Testament",
-    totalChapters: ntChapters,
-  })
-  return streams
+  
+  // Fallback (shouldn't happen)
+  return [{
+    type: "custom" as const,
+    label: "Bible Reading"
+  }];
 }

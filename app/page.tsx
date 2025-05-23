@@ -9,7 +9,6 @@ import DurationSelection from "@/components/plan-wizard/duration-selection"
 import PlanSummary from "@/components/plan-wizard/plan-summary"
 import WholeBibleFlow, { type WholeBibleConfig } from "@/components/plan-wizard/whole-bible-flow"
 import PresetPlanFlow from "@/components/plan-wizard/preset-plan-flow"
-import BuildYourOwnFlow from "@/components/plan-wizard/build-your-own-flow"
 import StreamByStreamFlow from "@/components/plan-wizard/stream-by-stream-flow"
 import { BreadcrumbProvider, useBreadcrumb } from "@/components/plan-wizard/breadcrumb-context"
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
@@ -25,7 +24,6 @@ function BreadcrumbsForStep({ step, planConfig }: { step: number, planConfig: an
     ]
     if (step === 10) crumbs.push({ label: "Whole Bible" })
     else if (step === 15) crumbs.push({ label: "Preset Plan" })
-    else if (step === 20) crumbs.push({ label: "Build Your Own" })
     else if (step === 25) crumbs.push({ label: "Stream-by-Stream" })
     setItems(crumbs)
   }, [step, planConfig, setItems])
@@ -79,16 +77,10 @@ export default function BiblePlanGenerator() {
   const handleNext = () => {
     if (step === 1) {
       if (planConfig.readingType === "whole") {
-        // Skip to whole Bible flow
         setStep(10)
       } else if (planConfig.readingType === "preset") {
-        // Skip to preset plan flow
         setStep(15)
-      } else if (planConfig.readingType === "custom") {
-        // Skip to build your own flow
-        setStep(20)
       } else if (planConfig.readingType === "stream-by-stream") {
-        // Skip to stream-by-stream flow
         setStep(25)
       } else {
         setStep((prev) => prev + 1)
@@ -99,23 +91,15 @@ export default function BiblePlanGenerator() {
   }
 
   const handleBack = () => {
-    if (step === 10 || step === 15 || step === 20 || step === 25) {
-      // Go back to initial selection
+    if (step === 10 || step === 15 || step === 25) {
       setStep(1)
     } else if (
       step === 4 &&
       (planConfig.readingType === "whole" ||
-        planConfig.readingType === "preset" ||
-        planConfig.readingType === "custom" ||
         planConfig.readingType === "stream-by-stream")
     ) {
-      // If we're at duration selection and came from a special flow, go back
       if (planConfig.readingType === "whole") {
         setStep(10)
-      } else if (planConfig.readingType === "preset") {
-        setStep(15)
-      } else if (planConfig.readingType === "custom") {
-        setStep(20)
       } else if (planConfig.readingType === "stream-by-stream") {
         setStep(25)
       }
@@ -133,17 +117,12 @@ export default function BiblePlanGenerator() {
 
   const handleWholeBibleFlowComplete = (wholeBibleConfig: WholeBibleConfig) => {
     updateConfig("wholeBibleConfig", wholeBibleConfig)
-    setStep(4) // Go to duration selection
+    setStep(5) // Go to summary page after WholeBibleFlow
   }
 
   const handlePresetFlowComplete = (presetConfig: any) => {
     updateConfig("presetConfig", presetConfig)
-    setStep(4) // Go to duration selection
-  }
-
-  const handleCustomFlowComplete = (customConfig: any) => {
-    updateConfig("presetConfig", customConfig) // Reuse the presetConfig field
-    setStep(4) // Go to duration selection
+    setStep(5) // Skip duration selection, go directly to summary
   }
 
   const handleStreamByStreamFlowComplete = (customConfig: any) => {
@@ -184,7 +163,7 @@ export default function BiblePlanGenerator() {
               />
             )}
 
-            {step === 4 && (
+            {step === 4 && planConfig.readingType !== "preset" && (
               <DurationSelection
                 duration={planConfig.duration}
                 onChange={(duration) => updateConfig("duration", duration)}
@@ -207,15 +186,7 @@ export default function BiblePlanGenerator() {
             )}
 
             {step === 15 && (
-              <PresetPlanFlow onComplete={handlePresetFlowComplete} onBack={handleBack} duration={planConfig.duration} />
-            )}
-
-            {step === 20 && (
-              <BuildYourOwnFlow
-                onComplete={handleCustomFlowComplete}
-                onBack={handleBack}
-                duration={planConfig.duration}
-              />
+              <PresetPlanFlow onComplete={handlePresetFlowComplete} onBack={handleBack} />
             )}
 
             {step === 25 && (
@@ -226,13 +197,13 @@ export default function BiblePlanGenerator() {
               />
             )}
 
-            {step !== 10 && step !== 15 && step !== 20 && step !== 25 && (
+            {step !== 10 && step !== 15 && step !== 25 && step !== 5 && (
               <div className="mt-auto pt-4">
                 <div className="w-full bg-gray-800 h-1 mb-4 rounded-full overflow-hidden">
                   <div
                     className="bg-white h-full"
                     style={{
-                      width: `${(step / (step === 5 ? 5 : 4)) * 100}%`,
+                      width: `${(step / 4) * 100}%`,
                     }}
                   ></div>
                 </div>
@@ -246,27 +217,59 @@ export default function BiblePlanGenerator() {
                     <div></div>
                   )}
 
-                  {step < 4 ? (
-                    <Button
-                      onClick={handleNext}
-                      disabled={
-                        (step === 1 && !planConfig.readingType) ||
-                        (step === 2 && !planConfig.section) ||
-                        (step === 3 && !planConfig.pathway)
-                      }
-                      className="bg-white text-black hover:bg-gray-200"
-                    >
-                      Next
-                    </Button>
-                  ) : step === 4 ? (
-                    <Button onClick={handleCreatePlan} className="bg-white text-black hover:bg-gray-200">
-                      Create
-                    </Button>
-                  ) : (
-                    <Button onClick={() => setStep(1)} className="bg-white text-black hover:bg-gray-200">
-                      Create Another
-                    </Button>
-                  )}
+                  {/* Determine which button to show based on current step and flow */}
+                  {(() => {
+                    // For step 1, show Next for any reading type selection
+                    if (step === 1) {
+                      return (
+                        <Button
+                          onClick={handleNext}
+                          disabled={!planConfig.readingType}
+                          className="bg-white text-black hover:bg-gray-200"
+                        >
+                          Next
+                        </Button>
+                      )
+                    }
+                    
+                    // For steps 2-3, only show Next for section flow
+                    if (step <= 3 && planConfig.readingType === "section") {
+                      return (
+                        <Button
+                          onClick={handleNext}
+                          disabled={
+                            (step === 2 && !planConfig.section) ||
+                            (step === 3 && !planConfig.pathway)
+                          }
+                          className="bg-white text-black hover:bg-gray-200"
+                        >
+                          Next
+                        </Button>
+                      )
+                    }
+                    
+                    // For step 4 (duration selection), show Create button
+                    if (step === 4) {
+                      return (
+                        <Button onClick={handleCreatePlan} className="bg-white text-black hover:bg-gray-200">
+                          Create
+                        </Button>
+                      )
+                    }
+                    
+                    // Default fallback
+                    return null
+                  })()}
+                </div>
+              </div>
+            )}
+
+            {step === 5 && (
+              <div className="mt-auto pt-4">
+                <div className="flex justify-center">
+                  <Button onClick={() => setStep(1)} className="bg-white text-black hover:bg-gray-200">
+                    Create Another
+                  </Button>
                 </div>
               </div>
             )}

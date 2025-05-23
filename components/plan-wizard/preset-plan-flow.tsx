@@ -15,17 +15,31 @@ import TimelineVisualization from "./timeline-visualization"
 interface PresetPlanFlowProps {
   onComplete: (presetConfig: any) => void
   onBack: () => void
-  duration: {
+  duration?: {
     type: string
     value: number
   }
 }
 
-export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetPlanFlowProps) {
+export default function PresetPlanFlow({ onComplete, onBack }: PresetPlanFlowProps) {
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
   const [previewPlan, setPreviewPlan] = useState<any>(null)
   const [streamVisualization, setStreamVisualization] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  
+  // Preset plans have their own natural durations
+  const getPresetDuration = (presetId: string) => {
+    switch (presetId) {
+      case "horner":
+        return { type: "days", value: 365 } // Professor Horner's is designed for 1 year
+      case "mcheyne":
+        return { type: "days", value: 365 } // M'Cheyne is designed for 1 year
+      case "workweek":
+        return { type: "days", value: 260 } // 5 days/week for 52 weeks
+      default:
+        return { type: "days", value: 365 }
+    }
+  }
 
   const presets = [
     {
@@ -71,14 +85,12 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
 
       // Generate visualization
       const config = preset.getConfig()
+      const presetDuration = getPresetDuration(selectedPreset)
       const visualization = generateStreamVisualization(config.streams)
       setStreamVisualization(visualization)
 
-      // Generate plan preview
-      const totalDays = duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
-                     duration.type === "weeks" ? duration.value * 7 :
-                     duration.type === "years" ? Math.round(duration.value * 365.25) : 
-                     duration.value // days
+      // Generate plan preview using preset's natural duration
+      const totalDays = presetDuration.value
 
       try {
         const planData = await generateMultiStreamPlan({
@@ -101,18 +113,16 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
     }
 
     generatePreview()
-  }, [selectedPreset, duration])
+  }, [selectedPreset])
 
   // Function to generate stream visualization data
   const generateStreamVisualization = (streams: any[]) => {
     console.log("[DEBUG] Input streams:", streams)
     // If all streams have a 'label' property (Horner), just map them directly
     if (streams.every((s) => s.label)) {
-      // Calculate repetitions for each list
-      const totalPlanDays = duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
-                           duration.type === "weeks" ? duration.value * 7 :
-                           duration.type === "years" ? Math.round(duration.value * 365.25) : 
-                           duration.value // days
+      // Calculate repetitions for each list using preset's natural duration
+      const presetDuration = selectedPreset ? getPresetDuration(selectedPreset) : { type: "days", value: 365 }
+      const totalPlanDays = presetDuration.value
       const result = streams.map((stream) => {
         // Sum chapters for this list
         const totalChapters = stream.bookCodes.reduce((sum: number, code: number) => {
@@ -216,18 +226,17 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
 
   const handleConfirmPreset = () => {
     const preset = presets.find((p) => p.id === selectedPreset)
-    if (preset) {
+    if (preset && selectedPreset) {
       const config = preset.getConfig()
+      const presetDuration = getPresetDuration(selectedPreset)
 
       // Pass the selected preset configuration back to the parent
       onComplete({
         presetId: selectedPreset,
         presetName: preset.title,
         presetConfig: config,
-        totalPlanDays: duration.type === "months" ? Math.round(duration.value * 365.25 / 12) : 
-                      duration.type === "weeks" ? duration.value * 7 :
-                      duration.type === "years" ? Math.round(duration.value * 365.25) : 
-                      duration.value, // days
+        totalPlanDays: presetDuration.value,
+        duration: presetDuration, // Include the preset's natural duration
       })
     }
   }
@@ -312,7 +321,7 @@ export default function PresetPlanFlow({ onComplete, onBack, duration }: PresetP
               <ReadingPlanPreview
                 config={{
                   readingType: "preset",
-                  duration,
+                  duration: selectedPreset ? getPresetDuration(selectedPreset) : { type: "days", value: 365 },
                   presetPlan: previewPlan,
                   wholeBibleConfig: {
                     newTestamentPlacement: "alongside",

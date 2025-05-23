@@ -39,15 +39,16 @@ export default function PlanSummary({ config }: PlanSummaryProps) {
 
         if ((config.readingType === "preset" || config.readingType === "stream-by-stream") && config.presetConfig) {
           // Generate plan using the preset config
-          const { presetConfig, presetName, totalPlanDays } = config.presetConfig
+          const { presetConfig, presetName, totalPlanDays, duration: presetDuration } = config.presetConfig
+          const effectiveDuration = presetDuration || config.duration
 
           planData = await generateMultiStreamPlan({
             id: `plan-${Date.now()}`,
             name: presetName || "Preset Bible Reading Plan",
-            description: `A ${config.duration.value} ${config.duration.type} reading plan using the ${presetName} format.`,
+            description: `A ${effectiveDuration.value} ${effectiveDuration.type} reading plan using the ${presetName} format.`,
             streams: presetConfig.streams,
             totalPlanDays: totalPlanDays,
-            tags: ["preset", presetName?.toLowerCase() || "", `${config.duration.value}-${config.duration.type}`],
+            tags: ["preset", presetName?.toLowerCase() || "", `${effectiveDuration.value}-${effectiveDuration.type}`],
             author: "Bible Plan Generator",
             version: "1.0",
           })
