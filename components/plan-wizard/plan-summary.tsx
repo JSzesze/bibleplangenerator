@@ -124,6 +124,14 @@ export default function PlanSummary({ config }: PlanSummaryProps) {
       // Remove bookReadingCounts from the export
       delete exportPlan.bookReadingCounts
 
+      // Remove bookName from each reading in dailyReadings
+      exportPlan.dailyReadings = exportPlan.dailyReadings.map((day: any[]) =>
+        day.map((reading: any) => {
+          const { bookName, ...readingWithoutBookName } = reading
+          return readingWithoutBookName
+        })
+      )
+
       // First, stringify the entire plan with pretty formatting
       const jsonString = JSON.stringify(exportPlan, null, 2)
 
@@ -267,22 +275,24 @@ function getSectionName(section: string): string {
 }
 
 function getPlanName(config: any): string {
-  const sectionName = {
+  const sectionNameMap: Record<string, string> = {
     "old-testament": "Old Testament",
     "new-testament": "New Testament",
     psalms: "Psalms",
     gospels: "Gospels",
     custom: "Custom",
     "": "Bible",
-  }[config.section]
+  }
 
-  const pathwayName = {
+  const pathwayNameMap: Record<string, string> = {
     storyline: "Chronological",
     straight: "",
     hebrew: "Hebrew Tradition",
     "": "",
-  }[config.pathway]
+  }
 
+  const sectionName = sectionNameMap[config.section] || "Bible"
+  const pathwayName = pathwayNameMap[config.pathway] || ""
   const duration = `${config.duration.value} ${config.duration.type}`
 
   return `${pathwayName} ${sectionName} in ${duration}`.replace(/\s+/g, " ").trim()
