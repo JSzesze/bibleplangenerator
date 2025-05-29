@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar, Users, Check } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-import { createHornerConfig, createMCheyneConfig, createWorkweekConfig } from "@/lib/plan-presets"
+import { createHornerConfig, createMCheyneConfig, createWorkweekConfig, createGenesisExodusThenNTConfig } from "@/lib/plan-presets"
 import { generateMultiStreamPlan } from "@/lib/plan-generator"
 import ReadingPlanPreview from "./reading-plan-preview"
 import bibleBooks from "@/constants/books.json"
@@ -36,6 +36,8 @@ export default function PresetPlanFlow({ onComplete, onBack }: PresetPlanFlowPro
         return { type: "days", value: 365 } // M'Cheyne is designed for 1 year
       case "workweek":
         return { type: "days", value: 260 } // 5 days/week for 52 weeks
+      case "gen-ex-nt":
+        return { type: "days", value: 365 } // Genesis, Exodus, then New Testament is designed for 1 year
       default:
         return { type: "days", value: 365 }
     }
@@ -68,6 +70,15 @@ export default function PresetPlanFlow({ onComplete, onBack }: PresetPlanFlowPro
       tags: ["Weekdays only", "Work-friendly", "Balanced"],
       getConfig: () => createWorkweekConfig(),
       color: "bg-green-600",
+    },
+    {
+      id: "gen-ex-nt",
+      title: "Genesis, Exodus, then New Testament",
+      description: "Read Genesis and Exodus, then the entire New Testament in a single stream.",
+      icon: <Calendar className="h-8 w-8 text-orange-500" />,
+      tags: ["Single stream", "Genesis", "Exodus", "New Testament"],
+      getConfig: () => createGenesisExodusThenNTConfig(),
+      color: "bg-orange-500",
     },
   ]
 

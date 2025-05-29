@@ -179,3 +179,20 @@ export function createHornerConfig() {
     totalPlanDays: 365,
   }
 }
+
+/**
+ * Create a configuration for a plan: Genesis, Exodus, then New Testament
+ */
+export function createGenesisExodusThenNTConfig() {
+  return {
+    streams: [
+      {
+        bookCodes: [
+          1, 2, // Genesis & Exodus
+          ...Array.from({ length: 27 }, (_, i) => i + 40) // NT books 40-66
+        ]
+      }
+    ],
+    totalPlanDays: 365,
+  }
+}

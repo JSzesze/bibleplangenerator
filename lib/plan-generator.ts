@@ -24,6 +24,7 @@ export interface PrecalculatedDailyPlanSchema {
   version?: string
   dailyReadings: ReadingPortion[][] // Outer array for days, inner array for readings on that day.
   bookReadingCounts?: Record<number, number> // Count of readings per book
+  planConfig?: any // The original plan config used to generate this plan (optional)
 }
 
 /**
@@ -69,6 +70,7 @@ export function generateSequentialPlan(params: {
   tags?: string[]
   author?: string
   version?: string
+  planConfig?: any
 }): PrecalculatedDailyPlanSchema {
   const { id, name, description, booksToInclude, chaptersPerDay = 1, totalPlanDays, tags, author, version } = params
 
@@ -132,6 +134,12 @@ export function generateSequentialPlan(params: {
     dayCount++
   }
 
+  const planConfig = params.planConfig || {
+    booksToInclude,
+    chaptersPerDay,
+    totalPlanDays,
+  }
+
   return {
     id,
     name,
@@ -143,6 +151,7 @@ export function generateSequentialPlan(params: {
     version,
     dailyReadings,
     bookReadingCounts,
+    planConfig,
   }
 }
 
@@ -160,6 +169,7 @@ export function generateMultiStreamPlan(params: {
   tags?: string[]
   author?: string
   version?: string
+  planConfig?: any
 }): PrecalculatedDailyPlanSchema {
   console.log("[DEBUG] generateMultiStreamPlan params:", params)
   const { id, name, description, streams, totalPlanDays, tags, author, version } = params
@@ -247,6 +257,12 @@ export function generateMultiStreamPlan(params: {
     dailyReadings,
     bookReadingCounts,
   });
+
+  const planConfig = params.planConfig || {
+    streams: params.streams,
+    totalPlanDays: params.totalPlanDays,
+  }
+
   return {
     id,
     name,
@@ -258,6 +274,7 @@ export function generateMultiStreamPlan(params: {
     version,
     dailyReadings,
     bookReadingCounts,
+    planConfig,
   }
 }
 
@@ -278,6 +295,7 @@ export function generateTopicalPlan(params: {
   tags?: string[]
   author?: string
   version?: string
+  planConfig?: any
 }): PrecalculatedDailyPlanSchema {
   const { id, name, description, topics, readingsPerDay = 1, tags, author, version } = params
 
@@ -330,6 +348,11 @@ export function generateTopicalPlan(params: {
     dailyReadings.push([...currentDay])
   }
 
+  const planConfig = params.planConfig || {
+    topics: params.topics,
+    readingsPerDay: params.readingsPerDay,
+  }
+
   return {
     id,
     name,
@@ -341,6 +364,7 @@ export function generateTopicalPlan(params: {
     version,
     dailyReadings,
     bookReadingCounts,
+    planConfig,
   }
 }
 
@@ -359,6 +383,7 @@ export function generateChronologicalPlan(params: {
   tags?: string[]
   author?: string
   version?: string
+  planConfig?: any
 }): PrecalculatedDailyPlanSchema {
   const {
     id,
@@ -418,6 +443,12 @@ export function generateChronologicalPlan(params: {
     dayCount++
   }
 
+  const planConfig = params.planConfig || {
+    chronologicalSequence: params.chronologicalSequence,
+    readingsPerDay: params.readingsPerDay,
+    totalPlanDays: params.totalPlanDays,
+  }
+
   return {
     id,
     name,
@@ -429,6 +460,7 @@ export function generateChronologicalPlan(params: {
     version,
     dailyReadings,
     bookReadingCounts,
+    planConfig,
   }
 }
 
@@ -438,7 +470,22 @@ export function generateChronologicalPlan(params: {
  * @param filePath The file path to save to
  */
 export function savePlanToJson(plan: PrecalculatedDailyPlanSchema): string {
-  return JSON.stringify(plan, null, 2)
+  // Custom replacer to flatten planConfig.streams to a single line
+  function replacer(key: string, value: any) {
+    if (key === 'streams' && Array.isArray(value)) {
+      // Serialize the streams array as a single line
+      return JSON.parse(JSON.stringify(value))
+    }
+    return value
+  }
+  let json = JSON.stringify(plan, replacer, 2)
+  // Post-process to flatten the streams array to a single line
+  json = json.replace(/("streams": )\[([\s\S]*?)\]/, (match, p1, p2) => {
+    // Remove newlines and extra spaces inside the streams array
+    const flat = p2.replace(/\n/g, '').replace(/\s{2,}/g, ' ').trim()
+    return p1 + '[' + flat + ']'
+  })
+  return json
 }
 
 /**

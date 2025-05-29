@@ -15,6 +15,7 @@ import { generateMultiStreamPlan } from "@/lib/plan-generator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import bibleBooks from "@/constants/books.json"
 
 interface StreamByStreamFlowProps {
   onComplete: (customConfig: any) => void
@@ -152,6 +153,7 @@ interface Stream {
   id: string
   name: string
   divisions: string[]
+  books: number[]
   chaptersPerDay: number
 }
 
@@ -195,13 +197,27 @@ function getDivisionRepetitionsFromPlan(plan: any): Record<string, number> {
   return divisionRepetitions
 }
 
+// Helper to get total chapters for a stream (books or divisions)
+const getStreamTotalChapters = (stream: Stream) => {
+  if (stream.books && stream.books.length > 0) {
+    return stream.books.reduce((sum, bookCode) => {
+      const book = bibleBooks.find((b) => b.bookCode === bookCode)
+      return sum + (book ? book.chapters : 0)
+    }, 0)
+  } else {
+    return stream.divisions.reduce((sum, division) => sum + (divisionChapterCounts[division] || 0), 0)
+  }
+}
+
 export default function StreamByStreamFlow({ onComplete, onBack, duration }: StreamByStreamFlowProps) {
   const [streams, setStreams] = useState<Stream[]>([])
   const [isEditingStream, setIsEditingStream] = useState(false)
+  const [mode, setMode] = useState<'division' | 'book'>('division')
   const [currentStream, setCurrentStream] = useState<Stream>({
     id: `stream-${Date.now()}`,
     name: `Stream ${streams.length + 1}`,
     divisions: [],
+    books: [],
     chaptersPerDay: 1,
   })
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
@@ -220,20 +236,41 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
     ? getDivisionRepetitionsFromPlan(previewPlan)
     : getDivisionRepetitions(streams)
 
-  // Get all book codes that are already assigned to a stream
+  // Book selection helpers
+  const allBooks = bibleBooks as { bookCode: number; name: string; testament?: string }[]
   const getAssignedBookCodes = () => {
     const assignedBooks = new Set<number>()
-
     streams.forEach((stream) => {
+      // Add books from divisions
       stream.divisions.forEach((division) => {
         const bookCodes = booksByDivision[division] || []
-        bookCodes.forEach((code) => {
-          assignedBooks.add(code)
-        })
+        bookCodes.forEach((code) => assignedBooks.add(code))
       })
+      // Add books from book mode
+      if (stream.books) {
+        stream.books.forEach((code) => assignedBooks.add(code))
+      }
     })
-
     return assignedBooks
+  }
+  const isBookAssigned = (bookCode: number) => {
+    // If editing, don't consider its own books as assigned
+    const relevantStreams = editingIndex !== null ? streams.filter((_, index) => index !== editingIndex) : streams
+    return relevantStreams.some((stream) =>
+      (stream.books && stream.books.includes(bookCode)) ||
+      (stream.divisions && stream.divisions.some((division) => (booksByDivision[division] || []).includes(bookCode)))
+    )
+  }
+  const toggleBook = (bookCode: number) => {
+    setCurrentStream((prev) => {
+      const newStream = { ...prev }
+      if (newStream.books.includes(bookCode)) {
+        newStream.books = newStream.books.filter((b) => b !== bookCode)
+      } else {
+        newStream.books = [...newStream.books, bookCode]
+      }
+      return newStream
+    })
   }
 
   // Check if a division is already assigned to any stream
@@ -316,6 +353,7 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
       id: `stream-${Date.now()}`,
       name: `Stream ${streams.length + 1}`,
       divisions: [],
+      books: [],
       chaptersPerDay: 1,
     })
     setEditingIndex(null)
@@ -372,29 +410,21 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
 
   // Updated: Accept streams argument for preview
   const generatePreview = async (previewStreams = streams) => {
-    // Only generate if we have streams with books
     if (previewStreams.length === 0) {
       setPreviewPlan(null)
       return
     }
-
-    // Convert our streams to the format expected by generateMultiStreamPlan
     const planStreams = previewStreams.map((stream) => {
-      // Get all book codes from the selected divisions
-      const bookCodes = stream.divisions.flatMap((division) => booksByDivision[division] || [])
-
+      const bookCodes = stream.books && stream.books.length > 0
+        ? stream.books
+        : stream.divisions.flatMap((division) => booksByDivision[division] || [])
       return {
         bookCodes,
         chaptersPerDay: stream.chaptersPerDay,
       }
     })
-
-    // Only generate if we have books selected
     if (planStreams.some((stream) => stream.bookCodes.length > 0)) {
       const totalDays = effectiveDuration
-
-      console.log("[DEBUG] Calling generateMultiStreamPlan with:", { planStreams, totalDays })
-
       try {
         const planData = await generateMultiStreamPlan({
           id: `custom-${Date.now()}`,
@@ -406,7 +436,6 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
           author: "Bible Plan Generator",
           version: "1.0",
         })
-
         setPreviewPlan(planData)
       } catch (error) {
         console.error("Error generating plan preview:", error)
@@ -443,7 +472,29 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
 
   // Create visualization data for the timeline with proportional segments
   const createProportionalVisualization = (stream: Stream) => {
-    // If no divisions, return a simple stream
+    // Book mode: each segment is a book
+    if (stream.books && stream.books.length > 0) {
+      const totalChapters = stream.books.reduce((sum, bookCode) => {
+        const book = bibleBooks.find((b) => b.bookCode === bookCode)
+        return sum + (book ? book.chapters : 0)
+      }, 0)
+      const segments = stream.books.map((bookCode) => {
+        const book = bibleBooks.find((b) => b.bookCode === bookCode)
+        const size = book && totalChapters > 0 ? book.chapters / totalChapters : 1
+        return {
+          type: 'custom' as const,
+          size,
+          label: book ? book.name : `Book ${bookCode}`,
+        }
+      })
+      return {
+        type: 'custom' as const,
+        label: stream.name,
+        segments,
+        totalChapters,
+      }
+    }
+    // Division mode: existing behavior
     if (stream.divisions.length === 0) {
       return {
         type: "custom" as const,
@@ -452,30 +503,25 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
         totalChapters: 0,
       }
     }
-
     // Calculate total chapters in this stream
     const totalChapters = stream.divisions.reduce((sum, division) => sum + (divisionChapterCounts[division] || 0), 0)
-
     // Create segments with proportional sizes
     const segments = stream.divisions.map((division) => {
       const chapterCount = divisionChapterCounts[division] || 0
       // Prevent division by zero which would result in NaN
       const size = totalChapters > 0 ? chapterCount / totalChapters : 1
-
       return {
         type: getStreamTypeForDivision(division),
         size,
         label: division, // Use division name as label
       }
     })
-
     // Sort segments by biblical order
     segments.sort((a, b) => {
       const indexA = allDivisions.indexOf(a.label || "")
       const indexB = allDivisions.indexOf(b.label || "")
       return indexA - indexB
     })
-
     return {
       type: getStreamTypeForCurrentStream(stream.divisions),
       label: stream.name,
@@ -533,6 +579,22 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
         {/* Timeline Visualization */}
         <div className="mb-4">
           <TimelineVisualization streams={[currentStreamVisualization]} />
+        </div>
+
+        {/* Mode Toggle */}
+        <div className="mb-4 flex gap-2">
+          <Button
+            variant={mode === 'division' ? 'default' : 'outline'}
+            onClick={() => setMode('division')}
+          >
+            By Division
+          </Button>
+          <Button
+            variant={mode === 'book' ? 'default' : 'outline'}
+            onClick={() => setMode('book')}
+          >
+            By Book
+          </Button>
         </div>
 
         {/* Stream Name Input and Chapters Per Day Incrementer (inline) */}
@@ -613,35 +675,67 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
           </div>
         </div>
 
-        {/* Division Selector */}
-        <div className="mb-6 flex-1">
-          <h2 className="text-lg font-medium mb-3">Select Bible Divisions</h2>
-          <div className="grid grid-cols-2 gap-2">
-            {allDivisions.map((division) => {
-              const isSelected = currentStream.divisions.includes(division)
-              const isAssigned = isDivisionAssigned(division)
-              const isPartiallyAssigned = isDivisionPartiallyAssigned(division)
-              return (
-                <Button
-                  key={division}
-                  variant={isSelected ? "default" : "outline"}
-                  className={cn(
-                    "py-2 px-2 text-xs flex items-center justify-between truncate",
-                    isAssigned && "opacity-50 cursor-not-allowed",
-                    isPartiallyAssigned && !isSelected && "border-yellow-500"
-                  )}
-                  onClick={() => toggleDivision(division)}
-                  disabled={isAssigned}
-                >
-                  <span className="truncate">{division}</span>
-                  <span className="flex items-center ml-1">
-                    {isSelected && <Check className="h-3 w-3 ml-1" />}
-                  </span>
-                </Button>
-              )
-            })}
+        {/* Book Selector (only in book mode) */}
+        {mode === 'book' && (
+          <div className="mb-6 flex-1">
+            <h2 className="text-lg font-medium mb-3">Select Books</h2>
+            <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+              {allBooks.map((book) => {
+                const isSelected = currentStream.books.includes(book.bookCode)
+                const isAssigned = isBookAssigned(book.bookCode)
+                return (
+                  <Button
+                    key={book.bookCode}
+                    variant={isSelected ? "default" : "outline"}
+                    className={cn(
+                      "py-2 px-2 text-xs flex items-center justify-between truncate",
+                      isAssigned && "opacity-50 cursor-not-allowed"
+                    )}
+                    onClick={() => toggleBook(book.bookCode)}
+                    disabled={isAssigned}
+                  >
+                    <span className="truncate">{book.name}</span>
+                    <span className="flex items-center ml-1">
+                      {isSelected && <Check className="h-3 w-3 ml-1" />}
+                    </span>
+                  </Button>
+                )
+              })}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Division Selector (only in division mode) */}
+        {mode === 'division' && (
+          <div className="mb-6 flex-1">
+            <h2 className="text-lg font-medium mb-3">Select Bible Divisions</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {allDivisions.map((division) => {
+                const isSelected = currentStream.divisions.includes(division)
+                const isAssigned = isDivisionAssigned(division)
+                const isPartiallyAssigned = isDivisionPartiallyAssigned(division)
+                return (
+                  <Button
+                    key={division}
+                    variant={isSelected ? "default" : "outline"}
+                    className={cn(
+                      "py-2 px-2 text-xs flex items-center justify-between truncate",
+                      isAssigned && "opacity-50 cursor-not-allowed",
+                      isPartiallyAssigned && !isSelected && "border-yellow-500"
+                    )}
+                    onClick={() => toggleDivision(division)}
+                    disabled={isAssigned}
+                  >
+                    <span className="truncate">{division}</span>
+                    <span className="flex items-center ml-1">
+                      {isSelected && <Check className="h-3 w-3 ml-1" />}
+                    </span>
+                  </Button>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Save/Cancel Buttons */}
         <div className="mt-auto pt-4 flex justify-between">
@@ -651,7 +745,7 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
           <Button
             onClick={handleSaveStream}
             className="bg-white text-black hover:bg-gray-200"
-            disabled={currentStream.divisions.length === 0}
+            disabled={mode === 'division' ? currentStream.divisions.length === 0 : currentStream.books.length === 0}
           >
             {editingIndex !== null ? "Update Stream" : "Add Stream"}
           </Button>
@@ -683,13 +777,13 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
         (() => {
           // Calculate total chapters and estimated duration for all streams
           const totalChapters = streams.reduce(
-            (sum, stream) => sum + stream.divisions.reduce((s, d) => s + (divisionChapterCounts[d] || 0), 0),
+            (sum, stream) => sum + getStreamTotalChapters(stream),
             0
           );
           // Calculate the max days needed for any stream (since streams run in parallel)
           const maxDays = Math.max(
             ...streams.map(stream => {
-              const chapters = stream.divisions.reduce((s, d) => s + (divisionChapterCounts[d] || 0), 0);
+              const chapters = getStreamTotalChapters(stream);
               return stream.chaptersPerDay > 0 ? Math.ceil(chapters / stream.chaptersPerDay) : 0;
             }),
             0
@@ -757,10 +851,7 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
       {streams.length > 0 && (
         <div className="flex flex-col gap-2 mb-4">
           {streams.map((stream, index) => {
-            const totalChapters = stream.divisions.reduce(
-              (sum, division) => sum + (divisionChapterCounts[division] || 0),
-              0,
-            )
+            const totalChapters = getStreamTotalChapters(stream)
             const streamDuration = stream.chaptersPerDay > 0 ? calculateStreamDuration(totalChapters, stream.chaptersPerDay) : 0;
             const showAlert = streamDuration > effectiveDuration;
 
@@ -824,7 +915,7 @@ export default function StreamByStreamFlow({ onComplete, onBack, duration }: Str
                 </div>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400 mt-0.5">
                   <span>{stream.chaptersPerDay} chapter{stream.chaptersPerDay !== 1 ? "s" : ""}/day</span>
-                  <span>• {stream.divisions.length} division{stream.divisions.length !== 1 ? "s" : ""}</span>
+                  <span>• {stream.books.length > 0 ? `${stream.books.length} book${stream.books.length !== 1 ? 's' : ''}` : `${stream.divisions.length} division${stream.divisions.length !== 1 ? 's' : ''}`}</span>
                   <span>• {totalChapters} chapters</span>
                 </div>
               </div>
